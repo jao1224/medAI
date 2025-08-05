@@ -109,7 +109,7 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
       <DialogTrigger asChild>
         <Button size="sm">
           <PlusCircle className="mr-2 h-4 w-4" />
-          Adicionar Prontuário
+          Criar Prontuário
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
@@ -119,7 +119,7 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
               <DialogHeader>
                 <DialogTitle>Novo Prontuário</DialogTitle>
                 <DialogDescription>
-                  Preencha os detalhes para adicionar um novo registro.
+                  Preencha os detalhes para criar um novo registro.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-4">
