@@ -13,7 +13,7 @@ export const mockUsers: User[] = [
     nome: "Dr. João Médico",
     email: "joao@clinica.com",
     perfil: "medico",
-    "crm_cro": "CRM-12345",
+    crm_cro: "CRM-12345",
     telefone: "11987654321",
     criado_em: "2024-01-01T10:00:00Z"
   },
@@ -22,7 +22,7 @@ export const mockUsers: User[] = [
     nome: "Dra. Ana Dentista",
     email: "ana@clinica.com",
     perfil: "medico",
-    "crm_cro": "CRO-54321",
+    crm_cro: "CRO-54321",
     telefone: "11912345678",
     criado_em: "2024-01-01T10:00:00Z"
   },
