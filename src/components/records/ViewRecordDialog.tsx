@@ -47,11 +47,6 @@ export function ViewRecordDialog({ record, onRecordUpdate, children }: ViewRecor
         </DialogHeader>
         <ScrollArea className="max-h-[60vh]">
             <div className="space-y-4 py-4 pr-6">
-                <div className="text-sm">
-                    <div className="font-medium">Profissional</div>
-                    <p className="text-muted-foreground">{record.profissionalNome}</p>
-                </div>
-                
                 <RecordDetailItem label="Anamnese" value={record.anamnese} />
                 <RecordDetailItem label="Exame Físico" value={record.exameFisico} />
                 <RecordDetailItem label="Hipótese Diagnóstica" value={record.hipoteseDiagnostica} />

@@ -27,7 +27,6 @@ export function RecordTable({ records, onRecordUpdate }: RecordTableProps) {
         <TableRow>
           <TableHead>Data</TableHead>
           <TableHead>Paciente</TableHead>
-          <TableHead>Profissional</TableHead>
           <TableHead>Tipo</TableHead>
         </TableRow>
       </TableHeader>
@@ -38,7 +37,6 @@ export function RecordTable({ records, onRecordUpdate }: RecordTableProps) {
               <TableRow className="cursor-pointer">
                 <TableCell>{format(new Date(record.data), "PPP")}</TableCell>
                 <TableCell className="font-medium">{record.pacienteNome}</TableCell>
-                <TableCell>{record.profissionalNome}</TableCell>
                 <TableCell className="capitalize">{record.tipo}</TableCell>
               </TableRow>
             </DialogTrigger>
