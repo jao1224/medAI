@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockAppointments } from '@/lib/mock-data';
 import { Label } from '@/components/ui/label';
 import type { Appointment } from '@/lib/types';
 import { useUserData } from '@/hooks/use-user-data';
@@ -26,8 +25,7 @@ import { useAuth } from '@/hooks/use-auth';
 
 export default function AppointmentsPage() {
   const [selectedProfessional, setSelectedProfessional] = useState<string>('all');
-  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
-  const { professionals } = useUserData();
+  const { professionals, appointments, setAppointments } = useUserData();
   const { user, hasRole } = useAuth();
   const searchParams = useSearchParams();
   const patientIdFromQuery = searchParams.get('patientId');

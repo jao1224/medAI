@@ -6,16 +6,11 @@ import { AddPatientDialog } from "@/components/patients/AddPatientDialog";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useUserData } from '@/hooks/use-user-data';
 import { useAuth } from "@/hooks/use-auth";
-import { mockAppointments, mockHealthRecords } from "@/lib/mock-data";
-import { useState } from "react";
-import type { Appointment, ElectronicHealthRecord, User } from "@/lib/types";
-
+import type { ElectronicHealthRecord } from "@/lib/types";
 
 export default function PatientsPage() {
-  const { patients, addUser } = useUserData();
+  const { patients, addUser, records, setRecords, appointments } = useUserData();
   const { hasRole, loading } = useAuth();
-  const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
-  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
 
   const handleRecordUpdate = (updatedRecord: ElectronicHealthRecord) => {
     setRecords((prev) => 

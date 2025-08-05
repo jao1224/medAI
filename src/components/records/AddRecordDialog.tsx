@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -19,13 +19,15 @@ import { useToast } from "@/hooks/use-toast";
 import { PlusCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { ElectronicHealthRecord } from "@/lib/types";
+import type { ElectronicHealthRecord, Appointment } from "@/lib/types";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useUserData } from "@/hooks/use-user-data";
 import { Textarea } from "@/components/ui/textarea";
 
 interface AddRecordDialogProps {
   onRecordAdd: (newRecord: ElectronicHealthRecord) => void;
+  appointments: Appointment[];
+  records: ElectronicHealthRecord[];
 }
 
 const recordSchema = z.object({
@@ -39,7 +41,7 @@ const recordSchema = z.object({
 
 type RecordFormValues = z.infer<typeof recordSchema>;
 
-export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
+export function AddRecordDialog({ onRecordAdd, appointments, records }: AddRecordDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -56,6 +58,22 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
       conduta: "",
     }
   });
+
+  const doctorPatients = useMemo(() => {
+    if (!user || user.perfil !== 'medico') {
+        return patients;
+    }
+    const patientIdsFromAppointments = new Set(
+        appointments.filter(a => a.profissionalId === user.uid).map(a => a.pacienteId)
+    );
+    const patientIdsFromRecords = new Set(
+        records.filter(r => r.profissionalId === user.uid).map(r => r.pacienteId)
+    );
+    const doctorPatientIds = new Set([...patientIdsFromAppointments, ...patientIdsFromRecords]);
+    
+    return patients.filter(p => doctorPatientIds.has(p.uid));
+  }, [user, patients, appointments, records]);
+
 
   if (!user || user.perfil !== 'medico') return null;
 
@@ -136,7 +154,7 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {patients.map(p => (
+                          {doctorPatients.map(p => (
                             <SelectItem key={p.uid} value={p.uid}>{p.nome}</SelectItem>
                           ))}
                         </SelectContent>

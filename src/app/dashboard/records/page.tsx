@@ -6,7 +6,6 @@ import { useSearchParams } from 'next/navigation';
 import { RecordTable } from "@/components/records/RecordTable";
 import { AddRecordDialog } from '@/components/records/AddRecordDialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { mockHealthRecords } from '@/lib/mock-data';
 import type { ElectronicHealthRecord } from '@/lib/types';
 import { useAuth } from '@/hooks/use-auth';
 import { AddPatientDialog } from '@/components/patients/AddPatientDialog';
@@ -15,9 +14,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { FileText } from 'lucide-react';
 
 export default function RecordsPage() {
-  const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
   const { user, hasRole, loading } = useAuth();
-  const { patients, addUser } = useUserData();
+  const { patients, addUser, records: allRecords, setRecords, appointments } = useUserData();
   const searchParams = useSearchParams();
   const patientIdFromQuery = searchParams.get('patientId');
 
@@ -58,7 +56,7 @@ export default function RecordsPage() {
     ? patients.find(p => p.uid === patientIdFromQuery)
     : null;
 
-  const filteredRecords = records.filter(record => {
+  const filteredRecords = allRecords.filter(record => {
     // Doctor can only see their own records.
     const doctorMatch = record.profissionalId === user?.uid;
     const patientMatch = !patientIdFromQuery || record.pacienteId === patientIdFromQuery;
@@ -80,7 +78,11 @@ export default function RecordsPage() {
                 </div>
                 <div className="flex gap-2">
                     <AddPatientDialog onPatientAdd={addUser} />
-                    <AddRecordDialog onRecordAdd={handleRecordAdd} />
+                    <AddRecordDialog 
+                      onRecordAdd={handleRecordAdd} 
+                      appointments={appointments}
+                      records={allRecords}
+                    />
                 </div>
             </CardHeader>
             <CardContent>
