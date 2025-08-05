@@ -127,9 +127,12 @@ export const mockHealthRecords: ElectronicHealthRecord[] = [
     pacienteNome: "Maria Paciente",
     profissionalId: "medico001",
     profissionalNome: "Dr. João Médico",
-    descricao: "Paciente relata dor de cabeça persistente. Prescrito analgésico e solicitado exame de sangue.",
-    tipo: "consulta",
     data: "2024-08-15T09:00:00",
+    tipo: "consulta",
+    anamnese: "Paciente relata dor de cabeça persistente há 2 semanas, com piora ao final do dia. Nega febre ou outros sintomas.",
+    exameFisico: "Bom estado geral, corada, hidratada. Pressão arterial 120/80 mmHg. Ausculta cardíaca e pulmonar sem alterações.",
+    hipoteseDiagnostica: "Cefaleia tensional.",
+    conduta: "Prescrito analgésico (Paracetamol 500mg de 6/6h se dor), orientado sobre técnicas de relaxamento e solicitado exame de sangue para descartar outras causas.",
     criado_em: "2024-08-15T09:20:00"
   },
   {
@@ -138,9 +141,12 @@ export const mockHealthRecords: ElectronicHealthRecord[] = [
     pacienteNome: "Carlos Silva",
     profissionalId: "medico002",
     profissionalNome: "Dra. Ana Dentista",
-    descricao: "Limpeza de rotina e aplicação de flúor.",
-    tipo: "procedimento",
     data: "2024-08-15T10:30:00",
+    tipo: "procedimento",
+    anamnese: "Paciente veio para limpeza de rotina. Nega sensibilidade ou dor.",
+    exameFisico: "Presença de placa bacteriana leve em dentes inferiores. Gengivas saudáveis.",
+    hipoteseDiagnostica: "Profilaxia.",
+    conduta: "Realizada limpeza de rotina (profilaxia) e aplicação de flúor. Orientado sobre higiene bucal.",
     criado_em: "2024-08-15T11:00:00"
   },
   {
@@ -149,9 +155,12 @@ export const mockHealthRecords: ElectronicHealthRecord[] = [
     pacienteNome: "Maria Paciente",
     profissionalId: "medico002",
     profissionalNome: "Dra. Ana Dentista",
-    descricao: "Raio-X panorâmico da arcada dentária. Nenhum problema detectado.",
-    tipo: "exame",
     data: "2024-08-16T14:00:00",
+    tipo: "exame",
+    anamnese: "Paciente realizou Raio-X panorâmico solicitado para avaliação geral.",
+    exameFisico: "N/A",
+    hipoteseDiagnostica: "Avaliação de rotina.",
+    conduta: "Raio-X panorâmico da arcada dentária não mostrou cáries ou outras anormalidades. Retorno em 6 meses.",
     criado_em: "2024-08-16T14:30:00"
   },
 ];

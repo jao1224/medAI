@@ -34,9 +34,12 @@ export interface ElectronicHealthRecord {
   pacienteNome: string;
   profissionalId: string;
   profissionalNome: string;
-  descricao: string;
-  tipo: "consulta" | "exame" | "procedimento";
   data: string; // Using string for simplicity
+  tipo: "consulta" | "exame" | "procedimento";
+  anamnese: string;
+  exameFisico: string;
+  hipoteseDiagnostica: string;
+  conduta: string;
   criado_em: string;
 }
 

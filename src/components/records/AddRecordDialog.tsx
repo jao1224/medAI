@@ -23,7 +23,6 @@ import type { ElectronicHealthRecord } from "@/lib/types";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useUserData } from "@/hooks/use-user-data";
 import { Textarea } from "@/components/ui/textarea";
-import { format } from 'date-fns';
 
 interface AddRecordDialogProps {
   onRecordAdd: (newRecord: ElectronicHealthRecord) => void;
@@ -32,7 +31,10 @@ interface AddRecordDialogProps {
 const recordSchema = z.object({
     patientId: z.string({ required_error: "Por favor, selecione um paciente." }),
     type: z.enum(["consulta", "exame", "procedimento"], { required_error: "Por favor, selecione um tipo." }),
-    description: z.string().min(10, 'A descrição deve ter pelo menos 10 caracteres.'),
+    anamnese: z.string().min(1, 'Este campo é obrigatório.'),
+    exameFisico: z.string().min(1, 'Este campo é obrigatório.'),
+    hipoteseDiagnostica: z.string().min(1, 'Este campo é obrigatório.'),
+    conduta: z.string().min(1, 'Este campo é obrigatório.'),
 });
 
 type RecordFormValues = z.infer<typeof recordSchema>;
@@ -48,7 +50,10 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
     defaultValues: {
       patientId: undefined,
       type: undefined,
-      description: "",
+      anamnese: "",
+      exameFisico: "",
+      hipoteseDiagnostica: "",
+      conduta: "",
     }
   });
 
@@ -76,7 +81,10 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
         profissionalNome: user.nome,
         data: now.toISOString(),
         tipo: data.type,
-        descricao: data.description,
+        anamnese: data.anamnese,
+        exameFisico: data.exameFisico,
+        hipoteseDiagnostica: data.hipoteseDiagnostica,
+        conduta: data.conduta,
         criado_em: now.toISOString(),
     };
 
@@ -104,7 +112,7 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
           Adicionar Prontuário
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg">
         {isOpen && (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -114,7 +122,7 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
                   Preencha os detalhes para adicionar um novo registro.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
+              <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-4">
                 <FormField
                   control={form.control}
                   name="patientId"
@@ -163,20 +171,59 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
 
                 <FormField
                     control={form.control}
-                    name="description"
+                    name="anamnese"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Descrição</FormLabel>
+                        <FormLabel>Anamnese</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Descreva os detalhes do atendimento..." {...field} rows={5}/>
+                          <Textarea placeholder="Descreva a queixa e o histórico do paciente..." {...field} rows={4}/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                />
+                 <FormField
+                    control={form.control}
+                    name="exameFisico"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Exame Físico</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Descreva os achados do exame físico..." {...field} rows={4}/>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="hipoteseDiagnostica"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hipótese Diagnóstica</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Descreva a hipótese diagnóstica..." {...field} rows={3}/>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="conduta"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Conduta</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Descreva o plano terapêutico, prescrições e encaminhamentos..." {...field} rows={4}/>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                />
 
               </div>
-              <DialogFooter>
+              <DialogFooter className="pt-4">
                 <Button type="submit">Salvar Prontuário</Button>
               </DialogFooter>
             </form>

@@ -23,7 +23,7 @@ export function RecordTable({ records }: RecordTableProps) {
           <TableHead>Paciente</TableHead>
           <TableHead>Profissional</TableHead>
           <TableHead>Tipo</TableHead>
-           <TableHead>
+           <TableHead className="w-[100px]">
             <span className="sr-only">Ações</span>
           </TableHead>
         </TableRow>
