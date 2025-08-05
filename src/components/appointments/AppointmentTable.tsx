@@ -11,7 +11,18 @@ import { mockAppointments } from "@/lib/mock-data";
 import { format } from "date-fns";
 import { AppointmentActions } from "./AppointmentActions";
 
-export function AppointmentTable() {
+interface AppointmentTableProps {
+  professionalId?: string;
+}
+
+export function AppointmentTable({ professionalId }: AppointmentTableProps) {
+  const appointments =
+    professionalId && professionalId !== 'all'
+      ? mockAppointments.filter(
+          (appt) => appt.profissionalId === professionalId
+        )
+      : mockAppointments;
+
   return (
     <Table>
       <TableHeader>
@@ -28,7 +39,7 @@ export function AppointmentTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {mockAppointments.map((appt) => (
+        {appointments.map((appt) => (
           <TableRow key={appt.id}>
             <TableCell className="font-medium">{appt.pacienteNome}</TableCell>
             <TableCell>{appt.profissionalNome}</TableCell>
