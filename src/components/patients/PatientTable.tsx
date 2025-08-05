@@ -11,41 +11,44 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import type { User, ElectronicHealthRecord, Appointment, UserProfile } from "@/lib/types";
+import type { User, ElectronicHealthRecord, Appointment } from "@/lib/types";
 import { useMemo } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { ViewPatientDialog } from './ViewPatientDialog';
 
 interface PatientTableProps {
     allPatients: User[];
     allRecords: ElectronicHealthRecord[];
     allAppointments: Appointment[];
-    currentUser: User | null;
-    userRoles: UserProfile[];
 }
 
 export function PatientTable({ 
     allPatients, 
     allRecords, 
     allAppointments,
-    currentUser, 
-    userRoles 
 }: PatientTableProps) {
   const router = useRouter();
+  const { user, hasRole, loading } = useAuth();
 
-  const handleRowClick = (patientId: string) => {
-    router.push(`/dashboard/records?patientId=${patientId}`);
+
+  const handleRowClick = (patient: User) => {
+    if (hasRole('medico')) {
+        router.push(`/dashboard/records?patientId=${patient.uid}`);
+    }
+    // For other roles, the dialog will be triggered by the TableRow's onClick if they don't have medic role.
   };
 
   const filteredPatients = useMemo(() => {
-    if (userRoles.includes('medico') && currentUser) {
+    if (hasRole('medico') && user) {
       const doctorPatientIdsFromAppointments = new Set(
         allAppointments
-          .filter(appt => appt.profissionalId === currentUser.uid)
+          .filter(appt => appt.profissionalId === user.uid)
           .map(appt => appt.pacienteId)
       );
       
       const doctorPatientIdsFromRecords = new Set(
         allRecords
-            .filter(record => record.profissionalId === currentUser.uid)
+            .filter(record => record.profissionalId === user.uid)
             .map(record => record.pacienteId)
       );
 
@@ -53,7 +56,9 @@ export function PatientTable({
       return allPatients.filter(patient => combinedPatientIds.has(patient.uid) && patient.perfil === 'paciente');
     }
     return allPatients.filter(p => p.perfil === 'paciente');
-  }, [allPatients, allRecords, allAppointments, currentUser, userRoles]);
+  }, [allPatients, allRecords, allAppointments, user, hasRole]);
+
+  if(loading) return <p>Carregando...</p>;
 
   return (
     <Table>
@@ -67,20 +72,28 @@ export function PatientTable({
       </TableHeader>
       <TableBody>
         {filteredPatients.map((patient) => (
-          <TableRow 
-            key={patient.uid} 
-            onClick={() => handleRowClick(patient.uid)}
-            className="cursor-pointer"
-          >
-            <TableCell className="font-medium">{patient.nome}</TableCell>
-            <TableCell>{patient.email}</TableCell>
-            <TableCell>{patient.telefone}</TableCell>
-            <TableCell>
-                {patient.data_nascimento ? format(new Date(patient.data_nascimento), "PPP") : '-'}
-            </TableCell>
-          </TableRow>
+            <TableRow 
+                key={patient.uid} 
+                className={hasRole('medico') ? "cursor-pointer" : ""}
+            >
+                <TableCell className="font-medium" onClick={() => handleRowClick(patient)}>
+                    {hasRole('medico') ? (
+                        patient.nome
+                    ) : (
+                        <ViewPatientDialog patient={patient}>
+                            <span className="cursor-pointer text-primary underline-offset-4 hover:underline">{patient.nome}</span>
+                        </ViewPatientDialog>
+                    )}
+                </TableCell>
+                <TableCell>{patient.email}</TableCell>
+                <TableCell>{patient.telefone}</TableCell>
+                <TableCell>
+                    {patient.data_nascimento ? format(new Date(patient.data_nascimento), "PPP") : '-'}
+                </TableCell>
+            </TableRow>
         ))}
       </TableBody>
     </Table>
   );
 }
+
