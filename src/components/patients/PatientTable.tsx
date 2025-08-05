@@ -79,7 +79,7 @@ export function PatientTable({
                   className="cursor-pointer"
               >
                   <TableCell className="font-medium">
-                    <span className="text-primary underline-offset-4 hover:underline">{patient.nome}</span>
+                    {patient.nome}
                   </TableCell>
                   <TableCell>{patient.email}</TableCell>
                   <TableCell>{patient.telefone}</TableCell>
