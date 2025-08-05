@@ -27,6 +27,10 @@ export default function RecordsPage() {
 
   const userRoles: UserProfile[] = user?.perfil ? [user.perfil] : [];
 
+  const filteredRecords = hasRole('medico') && user 
+    ? records.filter(record => record.profissionalId === user.uid)
+    : records;
+
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8">
         <Card>
@@ -43,7 +47,7 @@ export default function RecordsPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <RecordTable records={records} />
+                <RecordTable records={filteredRecords} />
             </CardContent>
         </Card>
         

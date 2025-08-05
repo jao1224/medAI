@@ -119,7 +119,7 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
               <DialogHeader>
                 <DialogTitle>Novo Prontuário</DialogTitle>
                 <DialogDescription>
-                  Preencha os detalhes para criar um novo registro.
+                  Preencha os detalhes para criar um novo registro para o Dr(a). {user.nome}.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-4">
