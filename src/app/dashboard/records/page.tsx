@@ -5,17 +5,16 @@ import { useState } from 'react';
 import { RecordTable } from "@/components/records/RecordTable";
 import { AddRecordDialog } from '@/components/records/AddRecordDialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { mockHealthRecords, mockAppointments } from '@/lib/mock-data';
-import type { ElectronicHealthRecord, UserProfile } from '@/lib/types';
+import { mockHealthRecords } from '@/lib/mock-data';
+import type { ElectronicHealthRecord } from '@/lib/types';
 import { useAuth } from '@/hooks/use-auth';
 import { AddPatientDialog } from '@/components/patients/AddPatientDialog';
 import { useUserData } from '@/hooks/use-user-data';
-import { PatientTable } from '@/components/patients/PatientTable';
 
 export default function RecordsPage() {
   const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
   const { user, hasRole, loading } = useAuth();
-  const { patients, addUser } = useUserData();
+  const { addUser } = useUserData();
 
   const handleRecordAdd = (newRecord: ElectronicHealthRecord) => {
     setRecords((prev) => [newRecord, ...prev]);
@@ -24,8 +23,6 @@ export default function RecordsPage() {
   if (loading) {
     return <div>Carregando...</div>
   }
-
-  const userRoles: UserProfile[] = user?.perfil ? [user.perfil] : [];
 
   const filteredRecords = hasRole('medico') && user 
     ? records.filter(record => record.profissionalId === user.uid)
@@ -50,26 +47,6 @@ export default function RecordsPage() {
                 <RecordTable records={filteredRecords} />
             </CardContent>
         </Card>
-        
-        {hasRole('medico') && (
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-headline">Meus Pacientes</CardTitle>
-                    <CardDescription>
-                        Pacientes com agendamentos ou prontuários vinculados a você.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <PatientTable 
-                        allPatients={patients} 
-                        allRecords={records}
-                        allAppointments={mockAppointments}
-                        currentUser={user}
-                        userRoles={userRoles}
-                    />
-                </CardContent>
-            </Card>
-        )}
     </div>
   );
 }
