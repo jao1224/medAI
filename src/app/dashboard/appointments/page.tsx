@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -36,18 +37,18 @@ export default function AppointmentsPage() {
         </Card>
       </div>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <CardTitle className="font-headline">All Appointments</CardTitle>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <div className="flex items-center gap-2">
-              <Label htmlFor="professional-filter" className="text-sm font-medium">
+              <Label htmlFor="professional-filter" className="text-sm font-medium whitespace-nowrap">
                 Professional
               </Label>
               <Select
                 value={selectedProfessional}
                 onValueChange={setSelectedProfessional}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Select Professional" />
                 </SelectTrigger>
                 <SelectContent>
@@ -60,15 +61,17 @@ export default function AppointmentsPage() {
                 </SelectContent>
               </Select>
             </div>
-            <AddAppointmentDialog />
-            <Button variant="outline" size="sm">
-              <FileDown className="mr-2 h-4 w-4" />
-              Export PDF
-            </Button>
-            <Button variant="outline" size="sm">
-              <FileDown className="mr-2 h-4 w-4" />
-              Export XLSX
-            </Button>
+            <div className="flex gap-2">
+              <AddAppointmentDialog />
+              <Button variant="outline" size="sm">
+                <FileDown className="mr-2 h-4 w-4" />
+                Export PDF
+              </Button>
+              <Button variant="outline" size="sm">
+                <FileDown className="mr-2 h-4 w-4" />
+                Export XLSX
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
