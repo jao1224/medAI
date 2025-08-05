@@ -1,6 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,13 +20,13 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar as CalendarIcon, PlusCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { mockUsers } from "@/lib/mock-data";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import type { Appointment, User } from "@/lib/types";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface AddAppointmentDialogProps {
   onAppointmentAdd: (newAppointment: Appointment) => void;
@@ -30,35 +34,32 @@ interface AddAppointmentDialogProps {
   professionals: User[];
 }
 
+const appointmentSchema = z.object({
+    patientId: z.string({ required_error: "Please select a patient." }),
+    professionalId: z.string({ required_error: "Please select a professional." }),
+    date: z.date({ required_error: "Please select a date." }),
+    time: z.string({ required_error: "Please select a time." }),
+    type: z.enum(["consulta", "exame", "procedimento"], { required_error: "Please select a type." }),
+});
+
+type AppointmentFormValues = z.infer<typeof appointmentSchema>;
+
 export function AddAppointmentDialog({ onAppointmentAdd, patients, professionals }: AddAppointmentDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [date, setDate] = useState<Date>();
   const { toast } = useToast();
   const { user, hasRole } = useAuth();
   
+  const form = useForm<AppointmentFormValues>({
+    resolver: zodResolver(appointmentSchema),
+  });
+
   const canAdd = hasRole(['admin', 'recepcionista']);
   
   if (!canAdd) return null;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const patientId = formData.get("patient") as string;
-    const professionalId = formData.get("professional") as string;
-    const time = formData.get("time") as string;
-    const type = formData.get("type") as "consulta" | "exame" | "procedimento";
-
-    if (!patientId || !professionalId || !date || !time || !type) {
-        toast({
-            title: "Error",
-            description: "Please fill all fields.",
-            variant: "destructive",
-        });
-        return;
-    }
-
-    const patient = patients.find(p => p.uid === patientId);
-    const professional = professionals.find(p => p.uid === professionalId);
+  const onSubmit = (data: AppointmentFormValues) => {
+    const patient = patients.find(p => p.uid === data.patientId);
+    const professional = professionals.find(p => p.uid === data.professionalId);
 
     if (!patient || !professional) {
          toast({
@@ -69,21 +70,21 @@ export function AddAppointmentDialog({ onAppointmentAdd, patients, professionals
         return;
     }
 
-    const [hours, minutes] = time.split(':');
-    const appointmentDateTime = new Date(date);
+    const [hours, minutes] = data.time.split(':');
+    const appointmentDateTime = new Date(data.date);
     appointmentDateTime.setHours(parseInt(hours, 10));
     appointmentDateTime.setMinutes(parseInt(minutes, 10));
 
     const newAppointment: Appointment = {
         id: `appt${Date.now()}`,
-        pacienteId,
+        pacienteId: data.patientId,
         pacienteNome: patient.nome,
-        profissionalId,
+        profissionalId: data.professionalId,
         profissionalNome: professional.nome,
         data_hora: appointmentDateTime.toISOString(),
-        tipo,
+        tipo: data.type,
         status: "agendado",
-        criado_por: user?.perfil === 'admin' ? 'recepcionista' : (user?.perfil || 'recepcionista'), // Simplified
+        criado_por: user?.perfil === 'admin' ? 'recepcionista' : (user?.perfil || 'recepcionista'),
         confirmado: false,
         canal: "sistema",
     };
@@ -96,12 +97,16 @@ export function AddAppointmentDialog({ onAppointmentAdd, patients, professionals
     });
 
     setIsOpen(false);
-    setDate(undefined);
-    (event.target as HTMLFormElement).reset();
+    form.reset();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      setIsOpen(open);
+      if (!open) {
+        form.reset();
+      }
+    }}>
       <DialogTrigger asChild>
         <Button size="sm">
           <PlusCircle className="mr-2 h-4 w-4" />
@@ -109,87 +114,134 @@ export function AddAppointmentDialog({ onAppointmentAdd, patients, professionals
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>New Appointment</DialogTitle>
-            <DialogDescription>
-              Fill in the details to schedule a new appointment.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="patient">Patient</Label>
-              <Select name="patient">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a patient" />
-                </SelectTrigger>
-                <SelectContent>
-                  {patients.map(p => (
-                    <SelectItem key={p.uid} value={p.uid}>{p.nome}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <DialogHeader>
+              <DialogTitle>New Appointment</DialogTitle>
+              <DialogDescription>
+                Fill in the details to schedule a new appointment.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+               <FormField
+                control={form.control}
+                name="patientId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Patient</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                       <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a patient" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {patients.map(p => (
+                          <SelectItem key={p.uid} value={p.uid}>{p.nome}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="professionalId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Professional</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                       <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a professional" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {professionals.map(p => (
+                          <SelectItem key={p.uid} value={p.uid}>{p.nome}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Date</FormLabel>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                           <FormControl>
+                            <Button
+                            variant={"outline"}
+                            className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                            )}
+                            >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                            </Button>
+                           </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                            <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                            />
+                        </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                  control={form.control}
+                  name="time"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Time</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+               <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                       <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="consulta">Consulta</SelectItem>
+                        <SelectItem value="exame">Exame</SelectItem>
+                        <SelectItem value="procedimento">Procedimento</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-             <div className="space-y-2">
-              <Label htmlFor="professional">Professional</Label>
-              <Select name="professional">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a professional" />
-                </SelectTrigger>
-                <SelectContent>
-                  {professionals.map(p => (
-                    <SelectItem key={p.uid} value={p.uid}>{p.nome}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="date">Date</Label>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                        variant={"outline"}
-                        className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
-                        )}
-                        >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                        <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                        />
-                    </PopoverContent>
-                </Popover>
-            </div>
-             <div className="space-y-2">
-              <Label htmlFor="time">Time</Label>
-              <Input name="time" id="time" type="time" defaultValue="09:00" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="type">Type</Label>
-              <Select name="type">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a type" />
-                </SelectTrigger>
-                <SelectContent>
-                   <SelectItem value="consulta">Consulta</SelectItem>
-                   <SelectItem value="exame">Exame</SelectItem>
-                   <SelectItem value="procedimento">Procedimento</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Save Appointment</Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter>
+              <Button type="submit">Save Appointment</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
