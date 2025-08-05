@@ -44,7 +44,7 @@ export function ViewRecordDialog({ record, patient, onRecordUpdate, children }: 
           <DialogTitle className="font-headline">Detalhes do Prontuário</DialogTitle>
           <DialogDescription>
             <span className="capitalize">{record.tipo}</span> de {record.pacienteNome} em {format(new Date(record.data), "PPP")}
-            <p className="text-xs">CPF: {patient.cpf || 'Não informado'} | Plano: {patient.plano_saude || 'Não informado'}</p>
+            <div className="text-xs text-muted-foreground">CPF: {patient.cpf || 'Não informado'} | Plano: {patient.plano_saude || 'Não informado'}</div>
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh]">
