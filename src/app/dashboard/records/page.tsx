@@ -11,6 +11,8 @@ import type { ElectronicHealthRecord } from '@/lib/types';
 import { useAuth } from '@/hooks/use-auth';
 import { AddPatientDialog } from '@/components/patients/AddPatientDialog';
 import { useUserData } from '@/hooks/use-user-data';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { FileText } from 'lucide-react';
 
 export default function RecordsPage() {
   const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
@@ -27,12 +29,30 @@ export default function RecordsPage() {
     return <div>Carregando...</div>
   }
 
+  // Restrict access to non-medical staff
+  if (!hasRole('medico')) {
+      return (
+        <div className="flex items-center justify-center h-[calc(100vh-10rem)]">
+          <Alert className="max-w-lg text-center">
+            <AlertTitle className="font-headline text-xl flex items-center justify-center gap-2">
+              <FileText className="h-6 w-6" />
+              Acesso Restrito
+            </AlertTitle>
+            <AlertDescription className="mt-2">
+              Apenas profissionais de saúde (médicos) podem visualizar os prontuários eletrônicos.
+            </AlertDescription>
+          </Alert>
+        </div>
+    );
+  }
+
   const patientName = patientIdFromQuery 
     ? patients.find(p => p.uid === patientIdFromQuery)?.nome 
     : null;
 
   const filteredRecords = records.filter(record => {
-    const doctorMatch = !hasRole('medico') || !user || record.profissionalId === user.uid;
+    // Doctor can only see their own records.
+    const doctorMatch = record.profissionalId === user?.uid;
     const patientMatch = !patientIdFromQuery || record.pacienteId === patientIdFromQuery;
     return doctorMatch && patientMatch;
   });
@@ -46,13 +66,13 @@ export default function RecordsPage() {
                     <CardDescription>
                         {patientName
                             ? `Exibindo prontuários para ${patientName}.`
-                            : "Navegue e gerencie todos os prontuários eletrônicos de saúde."
+                            : "Navegue e gerencie todos os seus prontuários eletrônicos de saúde."
                         }
                     </CardDescription>
                 </div>
                 <div className="flex gap-2">
-                    {hasRole('medico') && <AddPatientDialog onPatientAdd={addUser} />}
-                    {hasRole('medico') && <AddRecordDialog onRecordAdd={handleRecordAdd} />}
+                    <AddPatientDialog onPatientAdd={addUser} />
+                    <AddRecordDialog onRecordAdd={handleRecordAdd} />
                 </div>
             </CardHeader>
             <CardContent>
