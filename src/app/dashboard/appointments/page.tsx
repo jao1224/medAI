@@ -2,8 +2,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AppointmentTable } from "@/components/appointments/AppointmentTable";
 import { Button } from "@/components/ui/button";
-import { FileDown } from "lucide-react";
+import { FileDown, PlusCircle } from "lucide-react";
 import { SchedulingAssistant } from "@/components/ai/SchedulingAssistant";
+import { AddAppointmentDialog } from "@/components/appointments/AddAppointmentDialog";
 
 export default function AppointmentsPage() {
   return (
@@ -25,6 +26,7 @@ export default function AppointmentsPage() {
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="font-headline">All Appointments</CardTitle>
                  <div className="flex items-center gap-2">
+                    <AddAppointmentDialog />
                     <Button variant="outline" size="sm">
                         <FileDown className="mr-2 h-4 w-4" />
                         Export PDF
