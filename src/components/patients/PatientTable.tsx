@@ -10,18 +10,48 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import type { User } from "@/lib/types";
+import type { User, ElectronicHealthRecord, Appointment, UserProfile } from "@/lib/types";
+import { useMemo } from 'react';
 
 interface PatientTableProps {
-    patients: User[];
+    allPatients: User[];
+    allRecords: ElectronicHealthRecord[];
+    allAppointments: Appointment[];
+    currentUser: User | null;
+    userRoles: UserProfile[];
 }
 
-export function PatientTable({ patients }: PatientTableProps) {
+export function PatientTable({ 
+    allPatients, 
+    allRecords, 
+    allAppointments,
+    currentUser, 
+    userRoles 
+}: PatientTableProps) {
   const router = useRouter();
 
   const handleRowClick = (patientId: string) => {
     router.push(`/dashboard/appointments?patientId=${patientId}`);
   };
+
+  const filteredPatients = useMemo(() => {
+    if (userRoles.includes('medico') && currentUser) {
+      const doctorPatientIdsFromAppointments = new Set(
+        allAppointments
+          .filter(appt => appt.profissionalId === currentUser.uid)
+          .map(appt => appt.pacienteId)
+      );
+      const doctorPatientIdsFromRecords = new Set(
+        allRecords
+            .filter(record => record.profissionalId === currentUser.uid)
+            .map(record => record.pacienteId)
+      );
+
+      const combinedPatientIds = new Set([...doctorPatientIdsFromAppointments, ...doctorPatientIdsFromRecords]);
+      return allPatients.filter(patient => combinedPatientIds.has(patient.uid));
+    }
+    return allPatients.filter(p => p.perfil === 'paciente');
+  }, [allPatients, allRecords, allAppointments, currentUser, userRoles]);
 
   return (
     <Table>
@@ -34,7 +64,7 @@ export function PatientTable({ patients }: PatientTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {patients.map((patient) => (
+        {filteredPatients.map((patient) => (
           <TableRow 
             key={patient.uid} 
             onClick={() => handleRowClick(patient.uid)}

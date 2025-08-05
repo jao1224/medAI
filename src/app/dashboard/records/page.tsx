@@ -14,31 +14,16 @@ import { PatientTable } from '@/components/patients/PatientTable';
 
 export default function RecordsPage() {
   const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
-  const { user, hasRole } = useAuth();
+  const { user, hasRole, loading } = useAuth();
   const { patients, addUser } = useUserData();
 
   const handleRecordAdd = (newRecord: ElectronicHealthRecord) => {
     setRecords((prev) => [newRecord, ...prev]);
   };
-
-  const getFilteredPatients = () => {
-    if (hasRole('medico') && user) {
-      const doctorPatientIdsFromAppointments = new Set(
-        mockAppointments
-          .filter(appt => appt.profissionalId === user.uid)
-          .map(appt => appt.pacienteId)
-      );
-      const doctorPatientIdsFromRecords = new Set(
-        records
-            .filter(record => record.profissionalId === user.uid)
-            .map(record => record.pacienteId)
-      );
-
-      const combinedPatientIds = new Set([...doctorPatientIdsFromAppointments, ...doctorPatientIdsFromRecords]);
-      return patients.filter(patient => combinedPatientIds.has(patient.uid));
-    }
-    return patients;
-  };
+  
+  if (loading) {
+    return <div>Carregando...</div>
+  }
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8">
@@ -69,7 +54,13 @@ export default function RecordsPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <PatientTable patients={getFilteredPatients()} />
+                    <PatientTable 
+                        allPatients={patients} 
+                        allRecords={records}
+                        allAppointments={mockAppointments}
+                        currentUser={user}
+                        userRoles={['medico']}
+                    />
                 </CardContent>
             </Card>
         )}
