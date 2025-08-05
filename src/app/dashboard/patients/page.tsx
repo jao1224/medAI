@@ -1,23 +1,23 @@
+import { PatientTable } from "@/components/patients/PatientTable";
+import { AddPatientDialog } from "@/components/patients/AddPatientDialog";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Users } from "lucide-react";
 
 export default function PatientsPage() {
   return (
-    <div className="flex items-center justify-center h-[calc(100vh-10rem)]">
-      <Card className="w-full max-w-lg text-center p-6">
-        <CardHeader>
-          <div className="mx-auto bg-primary text-primary-foreground rounded-full p-4 w-fit mb-4">
-            <Users className="h-10 w-10" />
-          </div>
-          <CardTitle className="font-headline mt-4 text-2xl">Patient Management</CardTitle>
-          <CardDescription className="text-base">
-            This feature is under construction. Soon you will be able to manage patient records here.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-lg font-semibold text-muted-foreground">Coming Soon!</p>
-        </CardContent>
-      </Card>
+    <div className="grid auto-rows-max items-start gap-4 md:gap-8">
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle className="font-headline">All Patients</CardTitle>
+                    <CardDescription>View and manage all patient records.</CardDescription>
+                </div>
+                 <AddPatientDialog />
+            </CardHeader>
+            <CardContent>
+                <PatientTable />
+            </CardContent>
+        </Card>
     </div>
   );
 }

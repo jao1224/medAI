@@ -31,12 +31,12 @@ export interface Appointment {
 export interface ElectronicHealthRecord {
   id: string;
   pacienteId: string;
+  pacienteNome: string;
   profissionalId: string;
+  profissionalNome: string;
   descricao: string;
   tipo: "consulta" | "exame" | "procedimento";
-  laudos: string[];
   data: string; // Using string for simplicity
-  visivel_para: string[];
   criado_em: string;
 }
 

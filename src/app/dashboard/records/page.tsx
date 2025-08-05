@@ -1,23 +1,20 @@
+import { RecordTable } from "@/components/records/RecordTable";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { FileText } from "lucide-react";
 
 export default function RecordsPage() {
   return (
-    <div className="flex items-center justify-center h-[calc(100vh-10rem)]">
-      <Card className="w-full max-w-lg text-center p-6">
-        <CardHeader>
-          <div className="mx-auto bg-primary text-primary-foreground rounded-full p-4 w-fit mb-4">
-            <FileText className="h-10 w-10" />
-          </div>
-          <CardTitle className="font-headline mt-4 text-2xl">E-Health Records</CardTitle>
-          <CardDescription className="text-base">
-            This feature is under construction. Soon you will be able to manage electronic health records.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-lg font-semibold text-muted-foreground">Coming Soon!</p>
-        </CardContent>
-      </Card>
+    <div className="grid auto-rows-max items-start gap-4 md:gap-8">
+        <Card>
+            <CardHeader>
+                <CardTitle className="font-headline">E-Health Records</CardTitle>
+                <CardDescription>
+                    Browse and manage all electronic health records.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <RecordTable />
+            </CardContent>
+        </Card>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import type { User, Appointment } from './types';
+import type { User, Appointment, ElectronicHealthRecord } from './types';
 
 export const mockUsers: User[] = [
   {
@@ -45,6 +45,16 @@ export const mockUsers: User[] = [
     data_nascimento: "1985-11-30",
     endereco: "Av. Paulista, 1500, São Paulo, SP",
     criado_em: "2024-03-10T11:00:00Z"
+  },
+   {
+    uid: "paciente003",
+    nome: "Pedro Almeida",
+    email: "pedro@paciente.com",
+    perfil: "paciente",
+    telefone: "11966665555",
+    data_nascimento: "2001-01-15",
+    endereco: "Rua da Consolação, 900, São Paulo, SP",
+    criado_em: "2024-05-20T09:00:00Z"
   },
   {
     uid: "recepcionista001",
@@ -108,4 +118,40 @@ export const mockAppointments: Appointment[] = [
     confirmado: true,
     canal: "sistema"
   }
+];
+
+export const mockHealthRecords: ElectronicHealthRecord[] = [
+  {
+    id: "rec001",
+    pacienteId: "paciente001",
+    pacienteNome: "Maria Paciente",
+    profissionalId: "medico001",
+    profissionalNome: "Dr. João Médico",
+    descricao: "Paciente relata dor de cabeça persistente. Prescrito analgésico e solicitado exame de sangue.",
+    tipo: "consulta",
+    data: "2024-08-15T09:00:00",
+    criado_em: "2024-08-15T09:20:00"
+  },
+  {
+    id: "rec002",
+    pacienteId: "paciente002",
+    pacienteNome: "Carlos Silva",
+    profissionalId: "medico002",
+    profissionalNome: "Dra. Ana Dentista",
+    descricao: "Limpeza de rotina e aplicação de flúor.",
+    tipo: "procedimento",
+    data: "2024-08-15T10:30:00",
+    criado_em: "2024-08-15T11:00:00"
+  },
+  {
+    id: "rec003",
+    pacienteId: "paciente001",
+    pacienteNome: "Maria Paciente",
+    profissionalId: "medico002",
+    profissionalNome: "Dra. Ana Dentista",
+    descricao: "Raio-X panorâmico da arcada dentária. Nenhum problema detectado.",
+    tipo: "exame",
+    data: "2024-08-16T14:00:00",
+    criado_em: "2024-08-16T14:30:00"
+  },
 ];
