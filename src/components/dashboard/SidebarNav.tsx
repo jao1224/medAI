@@ -14,6 +14,7 @@ import {
   CreditCard,
   Settings,
 } from 'lucide-react';
+import { Skeleton } from '../ui/skeleton';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Home, roles: ['admin', 'medico', 'recepcionista', 'paciente'] },
@@ -28,14 +29,13 @@ const navItems = [
 
 export function SidebarNav() {
   const pathname = usePathname();
-  const { hasRole, loading, user } = useAuth();
+  const { hasRole, loading } = useAuth();
 
   if (loading) {
     return (
-      <nav className="flex flex-col items-start gap-2 px-4 text-sm font-medium">
-        {/* Skeleton loader */}
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-8 w-full bg-muted rounded-md animate-pulse" />
+      <nav className="grid items-start px-4 text-sm font-medium gap-2">
+        {[...Array(8)].map((_, i) => (
+           <Skeleton key={i} className="h-8 w-full" />
         ))}
       </nav>
     );

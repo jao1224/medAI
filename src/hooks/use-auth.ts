@@ -1,36 +1,56 @@
 
 "use client";
 
-import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useCallback, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import type { User, UserProfile } from '@/lib/types';
 import { mockUsers } from '@/lib/mock-data';
 
 
 export function useAuth() {
-  // Hardcode the admin user, so we are always "logged in"
-  const [user, setUser] = useState<User | null>(mockUsers.find(u => u.perfil === 'admin') || mockUsers[0]);
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (!loading && !user && pathname !== '/') {
+        router.push('/');
+    }
+  }, [user, loading, pathname, router]);
 
   const login = useCallback(async (email: string): Promise<boolean> => {
-    // Mock login is no longer needed, but we keep the function to avoid breaking changes
-    console.log('Login attempted, but authentication is disabled.');
+    setLoading(true);
+    console.log(`Login attempt for: ${email}`);
     const foundUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+    
     if (foundUser) {
         setUser(foundUser);
+        sessionStorage.setItem('user', JSON.stringify(foundUser));
+        console.log('User found, navigating to dashboard');
         router.push('/dashboard');
+        setLoading(false);
         return true;
     }
-    return true;
+    
+    console.log('User not found');
+    setLoading(false);
+    return false;
   }, [router]);
 
   const logout = useCallback(() => {
-    // Mock logout
-    console.log('Logout attempted, but authentication is disabled.');
-    // In a real app, you would redirect to login, but here we do nothing.
-  }, []);
+    setUser(null);
+    sessionStorage.removeItem('user');
+    router.push('/');
+  }, [router]);
   
   const hasRole = (roles: UserProfile | UserProfile[]) => {
     if (!user) return false;

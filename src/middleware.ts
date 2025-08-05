@@ -2,13 +2,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  // Redirect root to dashboard
-  if (pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
-  }
-
+  // The root path is now the login page, so no redirect is needed from middleware.
+  // The auth hook will handle redirecting to /dashboard after login.
   return NextResponse.next()
 }
 
