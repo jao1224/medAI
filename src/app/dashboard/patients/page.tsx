@@ -6,7 +6,7 @@ import { AddPatientDialog } from "@/components/patients/AddPatientDialog";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useUserData } from '@/hooks/use-user-data';
 import { useAuth } from "@/hooks/use-auth";
-import { mockAppointments } from "@/lib/mock-data";
+import { mockAppointments, mockHealthRecords } from "@/lib/mock-data";
 
 
 export default function PatientsPage() {
@@ -14,13 +14,21 @@ export default function PatientsPage() {
   const { user, hasRole } = useAuth();
 
   const getFilteredPatients = () => {
-    if (hasRole('medico')) {
-      const doctorPatientIds = new Set(
+    if (hasRole('medico') && user) {
+      const doctorPatientIdsFromAppointments = new Set(
         mockAppointments
-          .filter(appt => appt.profissionalId === user?.uid)
+          .filter(appt => appt.profissionalId === user.uid)
           .map(appt => appt.pacienteId)
       );
-      return patients.filter(patient => doctorPatientIds.has(patient.uid));
+      const doctorPatientIdsFromRecords = new Set(
+        mockHealthRecords
+            .filter(record => record.profissionalId === user.uid)
+            .map(record => record.pacienteId)
+      );
+
+      const combinedPatientIds = new Set([...doctorPatientIdsFromAppointments, ...doctorPatientIdsFromRecords]);
+
+      return patients.filter(patient => combinedPatientIds.has(patient.uid));
     }
     return patients;
   }
