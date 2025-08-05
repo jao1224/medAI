@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -41,6 +42,7 @@ export function PatientTable({
           .filter(appt => appt.profissionalId === currentUser.uid)
           .map(appt => appt.pacienteId)
       );
+      
       const doctorPatientIdsFromRecords = new Set(
         allRecords
             .filter(record => record.profissionalId === currentUser.uid)
@@ -48,7 +50,7 @@ export function PatientTable({
       );
 
       const combinedPatientIds = new Set([...doctorPatientIdsFromAppointments, ...doctorPatientIdsFromRecords]);
-      return allPatients.filter(patient => combinedPatientIds.has(patient.uid));
+      return allPatients.filter(patient => combinedPatientIds.has(patient.uid) && patient.perfil === 'paciente');
     }
     return allPatients.filter(p => p.perfil === 'paciente');
   }, [allPatients, allRecords, allAppointments, currentUser, userRoles]);

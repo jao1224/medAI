@@ -6,7 +6,7 @@ import { RecordTable } from "@/components/records/RecordTable";
 import { AddRecordDialog } from '@/components/records/AddRecordDialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { mockHealthRecords, mockAppointments } from '@/lib/mock-data';
-import type { ElectronicHealthRecord } from '@/lib/types';
+import type { ElectronicHealthRecord, UserProfile } from '@/lib/types';
 import { useAuth } from '@/hooks/use-auth';
 import { AddPatientDialog } from '@/components/patients/AddPatientDialog';
 import { useUserData } from '@/hooks/use-user-data';
@@ -24,6 +24,8 @@ export default function RecordsPage() {
   if (loading) {
     return <div>Carregando...</div>
   }
+
+  const userRoles: UserProfile[] = user?.perfil ? [user.perfil] : [];
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8">
@@ -59,7 +61,7 @@ export default function RecordsPage() {
                         allRecords={records}
                         allAppointments={mockAppointments}
                         currentUser={user}
-                        userRoles={['medico']}
+                        userRoles={userRoles}
                     />
                 </CardContent>
             </Card>
