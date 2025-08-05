@@ -18,12 +18,12 @@ import { cn } from '@/lib/utils';
 
 
 const appointmentChartData = [
-  { month: 'January', consulta: 186, exame: 80, procedimento: 40 },
-  { month: 'February', consulta: 305, exame: 200, procedimento: 100 },
-  { month: 'March', consulta: 237, exame: 120, procedimento: 80 },
-  { month: 'April', consulta: 73, exame: 190, procedimento: 50 },
-  { month: 'May', consulta: 209, exame: 130, procedimento: 90 },
-  { month: 'June', consulta: 214, exame: 140, procedimento: 60 },
+  { month: 'Janeiro', consulta: 186, exame: 80, procedimento: 40 },
+  { month: 'Fevereiro', consulta: 305, exame: 200, procedimento: 100 },
+  { month: 'Março', consulta: 237, exame: 120, procedimento: 80 },
+  { month: 'Abril', consulta: 73, exame: 190, procedimento: 50 },
+  { month: 'Maio', consulta: 209, exame: 130, procedimento: 90 },
+  { month: 'Junho', consulta: 214, exame: 140, procedimento: 60 },
 ];
 
 const appointmentChartConfig = {
@@ -40,7 +40,7 @@ const revenueChartData = [
 ];
 
 const revenueChartConfig = {
-    revenue: { label: 'Revenue', color: 'hsl(var(--primary))'},
+    revenue: { label: 'Receita', color: 'hsl(var(--primary))'},
 } satisfies ChartConfig;
 
 
@@ -49,8 +49,8 @@ export default function ReportsDashboard({ isDashboard = false }: { isDashboard?
     <div className={cn("grid gap-4 md:gap-8", isDashboard ? "" : "md:grid-cols-2")}>
        <Card className={cn(isDashboard && "lg:col-span-3")}>
         <CardHeader>
-          <CardTitle className="font-headline">Appointment Volume</CardTitle>
-          <CardDescription>January - June 2024</CardDescription>
+          <CardTitle className="font-headline">Volume de Agendamentos</CardTitle>
+          <CardDescription>Janeiro - Junho 2024</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={appointmentChartConfig} className="min-h-[200px] w-full">
@@ -76,8 +76,8 @@ export default function ReportsDashboard({ isDashboard = false }: { isDashboard?
       {!isDashboard && (
         <Card>
             <CardHeader>
-                <CardTitle className="font-headline">Revenue by Professional</CardTitle>
-                <CardDescription>Year-to-date</CardDescription>
+                <CardTitle className="font-headline">Receita por Profissional</CardTitle>
+                <CardDescription>Acumulado do Ano</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={revenueChartConfig} className="min-h-[200px] w-full">

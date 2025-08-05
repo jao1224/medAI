@@ -15,8 +15,8 @@ export default function PatientsPage() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                    <CardTitle className="font-headline">All Patients</CardTitle>
-                    <CardDescription>View and manage all patient records.</CardDescription>
+                    <CardTitle className="font-headline">Todos os Pacientes</CardTitle>
+                    <CardDescription>Visualize e gerencie todos os registros de pacientes.</CardDescription>
                 </div>
                  <AddPatientDialog onPatientAdd={addUser} />
             </CardHeader>

@@ -34,11 +34,11 @@ interface AddAppointmentDialogProps {
 }
 
 const appointmentSchema = z.object({
-    patientId: z.string({ required_error: "Please select a patient." }),
-    professionalId: z.string({ required_error: "Please select a professional." }),
-    date: z.date({ required_error: "Please select a date." }),
-    time: z.string({ required_error: "Please select a time." }).min(1, 'Time is required'),
-    type: z.enum(["consulta", "exame", "procedimento"], { required_error: "Please select a type." }),
+    patientId: z.string({ required_error: "Por favor, selecione um paciente." }),
+    professionalId: z.string({ required_error: "Por favor, selecione um profissional." }),
+    date: z.date({ required_error: "Por favor, selecione uma data." }),
+    time: z.string({ required_error: "Por favor, selecione um horário." }).min(1, 'O horário é obrigatório'),
+    type: z.enum(["consulta", "exame", "procedimento"], { required_error: "Por favor, selecione um tipo." }),
 });
 
 type AppointmentFormValues = z.infer<typeof appointmentSchema>;
@@ -70,8 +70,8 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
 
     if (!patient || !professional) {
          toast({
-            title: "Error",
-            description: "Invalid patient or professional selected.",
+            title: "Erro",
+            description: "Paciente ou profissional inválido selecionado.",
             variant: "destructive",
         });
         return;
@@ -99,8 +99,8 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
     onAppointmentAdd(newAppointment);
 
     toast({
-      title: "Success",
-      description: "New appointment created successfully.",
+      title: "Sucesso",
+      description: "Novo agendamento criado com sucesso.",
     });
 
     setIsOpen(false);
@@ -117,16 +117,16 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
       <DialogTrigger asChild>
         <Button size="sm">
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Appointment
+          Adicionar Agendamento
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>New Appointment</DialogTitle>
+              <DialogTitle>Novo Agendamento</DialogTitle>
               <DialogDescription>
-                Fill in the details to schedule a new appointment.
+                Preencha os detalhes para agendar uma nova consulta.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -135,11 +135,11 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
                 name="patientId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Patient</FormLabel>
+                    <FormLabel>Paciente</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                        <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a patient" />
+                          <SelectValue placeholder="Selecione um paciente" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -157,11 +157,11 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
                 name="professionalId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Professional</FormLabel>
+                    <FormLabel>Profissional</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                        <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a professional" />
+                          <SelectValue placeholder="Selecione um profissional" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -179,7 +179,7 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Data</FormLabel>
                     <Popover>
                         <PopoverTrigger asChild>
                            <FormControl>
@@ -191,7 +191,7 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
                             )}
                             >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                            {field.value ? format(field.value, "PPP") : <span>Escolha uma data</span>}
                             </Button>
                            </FormControl>
                         </PopoverTrigger>
@@ -213,7 +213,7 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
                   name="time"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Time</FormLabel>
+                      <FormLabel>Hora</FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
@@ -226,11 +226,11 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Type</FormLabel>
+                    <FormLabel>Tipo</FormLabel>
                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                        <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a type" />
+                          <SelectValue placeholder="Selecione um tipo" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -245,7 +245,7 @@ export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogP
               />
             </div>
             <DialogFooter>
-              <Button type="submit">Save Appointment</Button>
+              <Button type="submit">Salvar Agendamento</Button>
             </DialogFooter>
           </form>
         </Form>

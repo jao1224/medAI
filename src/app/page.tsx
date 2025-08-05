@@ -27,8 +27,8 @@ export default function LoginPage() {
       router.push('/dashboard');
     } else {
       toast({
-        title: 'Login Failed',
-        description: 'Invalid email or password. Please try again.',
+        title: 'Falha no Login',
+        description: 'Email ou senha inválidos. Por favor, tente novamente.',
         variant: 'destructive',
       });
       setIsLoading(false);
@@ -41,7 +41,7 @@ export default function LoginPage() {
         <CardHeader className="text-center">
           <Stethoscope className="mx-auto h-12 w-12 text-primary" />
           <CardTitle className="text-2xl font-headline mt-4">MedAI Clinic</CardTitle>
-          <CardDescription>Enter your credentials to access the panel</CardDescription>
+          <CardDescription>Insira suas credenciais para acessar o painel</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -57,7 +57,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Senha</Label>
               <Input 
                 id="password" 
                 type="password" 
@@ -67,10 +67,10 @@ export default function LoginPage() {
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              Hint: Use `admin@clinica.com` or `joao@clinica.com`. Any password will work.
+              Dica: Use `admin@clinica.com` ou `joao@clinica.com`. Qualquer senha funcionará.
             </p>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? <Loader2 className="animate-spin" /> : 'Login'}
+              {isLoading ? <Loader2 className="animate-spin" /> : 'Entrar'}
             </Button>
           </form>
         </CardContent>

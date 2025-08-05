@@ -9,13 +9,13 @@ export default function FinancialPage() {
           <div className="mx-auto bg-primary text-primary-foreground rounded-full p-4 w-fit mb-4">
             <CreditCard className="h-10 w-10" />
           </div>
-          <CardTitle className="font-headline mt-4 text-2xl">Financial Management</CardTitle>
+          <CardTitle className="font-headline mt-4 text-2xl">Gestão Financeira</CardTitle>
           <CardDescription className="text-base">
-            This feature is under construction. Soon you will be able to manage payments and financial reports.
+            Este recurso está em construção. Em breve você poderá gerenciar pagamentos e relatórios financeiros.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-lg font-semibold text-muted-foreground">Coming Soon!</p>
+          <p className="text-lg font-semibold text-muted-foreground">Em Breve!</p>
         </CardContent>
       </Card>
     </div>

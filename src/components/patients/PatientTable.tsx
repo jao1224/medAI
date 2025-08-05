@@ -18,10 +18,10 @@ export function PatientTable({ patients }: PatientTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
+          <TableHead>Nome</TableHead>
           <TableHead>Email</TableHead>
-          <TableHead>Phone</TableHead>
-          <TableHead>Birth Date</TableHead>
+          <TableHead>Telefone</TableHead>
+          <TableHead>Data de Nascimento</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

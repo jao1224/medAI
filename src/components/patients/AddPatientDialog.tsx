@@ -36,8 +36,8 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
 
     if (!name || !email) {
         toast({
-            title: "Error",
-            description: "Name and email are required.",
+            title: "Erro",
+            description: "Nome e email são obrigatórios.",
             variant: "destructive",
         });
         return;
@@ -56,8 +56,8 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
     onPatientAdd(newPatient);
 
     toast({
-      title: "Success",
-      description: "New patient added successfully.",
+      title: "Sucesso",
+      description: "Novo paciente adicionado com sucesso.",
     });
     setIsOpen(false);
     (event.target as HTMLFormElement).reset();
@@ -68,21 +68,21 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
       <DialogTrigger asChild>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Patient
+          Adicionar Paciente
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Add New Patient</DialogTitle>
+            <DialogTitle>Adicionar Novo Paciente</DialogTitle>
             <DialogDescription>
-              Fill in the details below to add a new patient.
+              Preencha os detalhes abaixo para adicionar um novo paciente.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Name
+                Nome
               </Label>
               <Input name="name" id="name" defaultValue="Pedro Almeida" className="col-span-3" />
             </div>
@@ -94,19 +94,19 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
             </div>
              <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="phone" className="text-right">
-                Phone
+                Telefone
               </Label>
               <Input name="phone" id="phone" type="tel" defaultValue="11987654321" className="col-span-3" />
             </div>
              <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="dob" className="text-right">
-                Birth Date
+                Data de Nasc.
               </Label>
               <Input name="dob" id="dob" type="date" defaultValue="1995-02-10" className="col-span-3" />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save Patient</Button>
+            <Button type="submit">Salvar Paciente</Button>
           </DialogFooter>
         </form>
       </DialogContent>

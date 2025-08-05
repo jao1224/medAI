@@ -6,9 +6,9 @@ export default function AiLogsPage() {
         <div>
             <Card>
                 <CardHeader>
-                    <CardTitle className="font-headline">AI Agent Logs</CardTitle>
+                    <CardTitle className="font-headline">Logs do Agente de IA</CardTitle>
                     <CardDescription>
-                        Log interactions from the AI agent to help improve its performance and track user intents.
+                        Registre as interações do agente de IA para ajudar a melhorar seu desempenho e rastrear as intenções do usuário.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

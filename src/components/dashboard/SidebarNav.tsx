@@ -17,14 +17,14 @@ import {
 import { Skeleton } from '../ui/skeleton';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: Home, roles: ['admin', 'medico', 'recepcionista', 'paciente'] },
-  { href: '/dashboard/appointments', label: 'Appointments', icon: Calendar, roles: ['admin', 'medico', 'recepcionista', 'paciente'] },
-  { href: '/dashboard/patients', label: 'Patients', icon: Users, roles: ['admin', 'medico', 'recepcionista'] },
-  { href: '/dashboard/records', label: 'E-Health Records', icon: FileText, roles: ['medico'] },
-  { href: '/dashboard/financial', label: 'Financial', icon: CreditCard, roles: ['admin', 'recepcionista'] },
-  { href: '/dashboard/reports', label: 'Reports', icon: BarChart3, roles: ['admin'] },
-  { href: '/dashboard/ai-logs', label: 'AI Agent Logs', icon: BotMessageSquare, roles: ['admin', 'recepcionista'] },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings, roles: ['admin'] },
+  { href: '/dashboard', label: 'Painel', icon: Home, roles: ['admin', 'medico', 'recepcionista', 'paciente'] },
+  { href: '/dashboard/appointments', label: 'Agendamentos', icon: Calendar, roles: ['admin', 'medico', 'recepcionista', 'paciente'] },
+  { href: '/dashboard/patients', label: 'Pacientes', icon: Users, roles: ['admin', 'medico', 'recepcionista'] },
+  { href: '/dashboard/records', label: 'Prontuários', icon: FileText, roles: ['medico'] },
+  { href: '/dashboard/financial', label: 'Financeiro', icon: CreditCard, roles: ['admin', 'recepcionista'] },
+  { href: '/dashboard/reports', label: 'Relatórios', icon: BarChart3, roles: ['admin'] },
+  { href: '/dashboard/ai-logs', label: 'Logs da IA', icon: BotMessageSquare, roles: ['admin', 'recepcionista'] },
+  { href: '/dashboard/settings', label: 'Configurações', icon: Settings, roles: ['admin'] },
 ];
 
 export function SidebarNav() {

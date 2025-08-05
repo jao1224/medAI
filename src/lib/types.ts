@@ -22,7 +22,7 @@ export interface Appointment {
   data_hora: string; // Using string for simplicity
   tipo: "consulta" | "exame" | "procedimento";
   status: "agendado" | "concluido" | "cancelado";
-  criado_por: "recepcionista" | "IA" | "paciente";
+  criado_por: "recepcionista" | "IA" | "paciente" | "admin";
   confirmado: boolean;
   reagendado_para?: string;
   canal: "whatsapp" | "email" | "sistema";

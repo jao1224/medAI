@@ -23,14 +23,14 @@ export function AppointmentTable({ appointments }: AppointmentTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Patient</TableHead>
-            <TableHead>Professional</TableHead>
-            <TableHead>Date & Time</TableHead>
-            <TableHead>Type</TableHead>
+            <TableHead>Paciente</TableHead>
+            <TableHead>Profissional</TableHead>
+            <TableHead>Data e Hora</TableHead>
+            <TableHead>Tipo</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Channel</TableHead>
+            <TableHead>Canal</TableHead>
             <TableHead>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">Ações</span>
             </TableHead>
           </TableRow>
         </TableHeader>

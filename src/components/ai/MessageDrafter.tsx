@@ -43,10 +43,10 @@ export function MessageDrafter({ appointment }: MessageDrafterProps) {
       });
       setDraft(result.message);
     } catch (error) {
-      console.error('Failed to draft message:', error);
+      console.error('Falha ao redigir mensagem:', error);
       toast({
-        title: 'Error',
-        description: 'Could not generate message draft.',
+        title: 'Erro',
+        description: 'Não foi possível gerar o rascunho da mensagem.',
         variant: 'destructive',
       });
     } finally {
@@ -57,8 +57,8 @@ export function MessageDrafter({ appointment }: MessageDrafterProps) {
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(draft);
     toast({
-      title: 'Copied!',
-      description: 'Message copied to clipboard.',
+      title: 'Copiado!',
+      description: 'Mensagem copiada para a área de transferência.',
     });
   };
 
@@ -67,14 +67,14 @@ export function MessageDrafter({ appointment }: MessageDrafterProps) {
       <DialogTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <Bot className="mr-2 h-4 w-4" />
-          AI Draft Message
+          Rascunho com IA
         </DropdownMenuItem>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="font-headline">AI Message Drafter</DialogTitle>
+          <DialogTitle className="font-headline">Rascunho com IA</DialogTitle>
           <DialogDescription>
-            Generate a personalized message for {appointment.pacienteNome}. The draft will be tailored for {appointment.canal}.
+            Gere uma mensagem personalizada para {appointment.pacienteNome}. O rascunho será adaptado para {appointment.canal}.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
@@ -82,14 +82,14 @@ export function MessageDrafter({ appointment }: MessageDrafterProps) {
             <div className="flex justify-center">
               <Button onClick={handleGenerateDraft}>
                 <Bot className="mr-2 h-4 w-4" />
-                Generate Draft
+                Gerar Rascunho
               </Button>
             </div>
           )}
           {isLoading && (
             <div className="flex items-center justify-center space-x-2">
               <Loader2 className="h-6 w-6 animate-spin" />
-              <span>Generating...</span>
+              <span>Gerando...</span>
             </div>
           )}
           {draft && (
@@ -105,11 +105,11 @@ export function MessageDrafter({ appointment }: MessageDrafterProps) {
           <DialogFooter>
             <Button variant="outline" onClick={handleCopyToClipboard}>
               <Clipboard className="mr-2 h-4 w-4" />
-              Copy
+              Copiar
             </Button>
             <Button onClick={() => setIsOpen(false)}>
               <Send className="mr-2 h-4 w-4" />
-              Send
+              Enviar
             </Button>
           </DialogFooter>
         )}

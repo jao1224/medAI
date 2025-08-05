@@ -12,15 +12,15 @@ import { suggestAppointmentTimes, type SuggestAppointmentTimesOutput } from '@/a
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const mockLogData = `
-- 2024-07-10: Patient 'paciente001' requested an appointment for 'next week'. Agent offered '2024-07-15 10:00'. Patient accepted.
-- 2024-07-11: Patient 'paciente001' asked about teeth cleaning. Agent provided info and offered booking. Patient asked for a weekend slot.
-- 2024-07-12: Patient 'paciente002' requested an urgent consultation for a toothache. Agent found a slot for the same day.
-- 2024-07-15: Patient 'paciente001' confirmed their appointment for today at 10:00.
+- 2024-07-10: Paciente 'paciente001' solicitou agendamento para 'próxima semana'. Agente ofereceu '2024-07-15 10:00'. Paciente aceitou.
+- 2024-07-11: Paciente 'paciente001' perguntou sobre limpeza dental. Agente forneceu informações e ofereceu agendamento. Paciente pediu horário no fim de semana.
+- 2024-07-12: Paciente 'paciente002' solicitou consulta de urgência para dor de dente. Agente encontrou um horário para o mesmo dia.
+- 2024-07-15: Paciente 'paciente001' confirmou sua consulta para hoje às 10:00.
 `;
 
 const mockAvailabilityData = `
-- Dr. João Médico: Available Mon-Fri 09:00-12:00, 14:00-18:00. Booked: 2024-08-15 09:00, 2024-08-17 11:00.
-- Dra. Ana Dentista: Available Tue, Thu, Fri 08:00-17:00. Booked: 2024-08-15 10:30, 2024-08-16 14:00.
+- Dr. João Médico: Disponível de Seg-Sex 09:00-12:00, 14:00-18:00. Ocupado: 2024-08-15 09:00, 2024-08-17 11:00.
+- Dra. Ana Dentista: Disponível Ter, Qui, Sex 08:00-17:00. Ocupado: 2024-08-15 10:30, 2024-08-16 14:00.
 `;
 
 
@@ -33,7 +33,7 @@ export function SchedulingAssistant() {
   const handleSuggestTimes = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!patientId) {
-      toast({ title: 'Patient ID required', description: 'Please enter a patient ID.', variant: 'destructive' });
+      toast({ title: 'ID do paciente obrigatório', description: 'Por favor, insira o ID do paciente.', variant: 'destructive' });
       return;
     }
 
@@ -48,10 +48,10 @@ export function SchedulingAssistant() {
       });
       setSuggestion(result);
     } catch (error) {
-      console.error('Failed to suggest times:', error);
+      console.error('Falha ao sugerir horários:', error);
       toast({
-        title: 'Error',
-        description: 'Could not generate suggestions.',
+        title: 'Erro',
+        description: 'Não foi possível gerar sugestões.',
         variant: 'destructive',
       });
     } finally {
@@ -64,19 +64,19 @@ export function SchedulingAssistant() {
       <CardHeader>
         <CardTitle className="font-headline flex items-center gap-2">
           <Bot className="h-6 w-6" />
-          AI Scheduling Assistant
+          Assistente de Agendamento IA
         </CardTitle>
         <CardDescription>
-          Get AI-powered appointment suggestions based on patient history and professional availability.
+          Receba sugestões de agendamento com IA baseadas no histórico do paciente e na disponibilidade do profissional.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSuggestTimes} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="patientId">Patient ID</Label>
+            <Label htmlFor="patientId">ID do Paciente</Label>
             <Input
               id="patientId"
-              placeholder="e.g., paciente001"
+              placeholder="ex: paciente001"
               value={patientId}
               onChange={(e) => setPatientId(e.target.value)}
               disabled={isLoading}
@@ -86,10 +86,10 @@ export function SchedulingAssistant() {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Analyzing...
+                Analisando...
               </>
             ) : (
-              'Suggest Times'
+              'Sugerir Horários'
             )}
           </Button>
         </form>
@@ -98,7 +98,7 @@ export function SchedulingAssistant() {
         <CardFooter className="flex-col items-start gap-4">
           <Alert>
             <CalendarClock className="h-4 w-4" />
-            <AlertTitle>Suggested Times</AlertTitle>
+            <AlertTitle>Horários Sugeridos</AlertTitle>
             <AlertDescription>
               <ul className="mt-2 list-disc pl-5 space-y-1">
                 {suggestion.suggestedTimes.map((time, index) => (
@@ -108,7 +108,7 @@ export function SchedulingAssistant() {
             </AlertDescription>
           </Alert>
           <Alert variant="default" className="bg-muted">
-              <AlertTitle>Reasoning</AlertTitle>
+              <AlertTitle>Justificativa</AlertTitle>
               <AlertDescription>
                   <p className="text-muted-foreground">{suggestion.reasoning}</p>
               </AlertDescription>

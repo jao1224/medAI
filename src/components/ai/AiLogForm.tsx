@@ -28,9 +28,9 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  usuarioId: z.string().min(1, "Patient ID is required."),
-  mensagem_usuario: z.string().min(1, "User message is required."),
-  resposta_ia: z.string().min(1, "AI response is required."),
+  usuarioId: z.string().min(1, "O ID do paciente é obrigatório."),
+  mensagem_usuario: z.string().min(1, "A mensagem do usuário é obrigatória."),
+  resposta_ia: z.string().min(1, "A resposta da IA é obrigatória."),
   intencao_detectada: z.enum(["agendamento", "duvida", "info", "outro"]),
   canal: z.enum(["whatsapp", "chat", "email"]),
 });
@@ -56,8 +56,8 @@ export default function AiLogForm() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     console.log(values);
     toast({
-      title: "Log Submitted",
-      description: "The AI interaction log has been successfully saved.",
+      title: "Log Enviado",
+      description: "O log de interação da IA foi salvo com sucesso.",
     });
     form.reset();
     setIsLoading(false);
@@ -72,12 +72,12 @@ export default function AiLogForm() {
             name="usuarioId"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Patient ID</FormLabel>
+                <FormLabel>ID do Paciente</FormLabel>
                 <FormControl>
                     <Input placeholder="paciente001" {...field} />
                 </FormControl>
                 <FormDescription>
-                    The unique identifier for the patient.
+                    O identificador único do paciente.
                 </FormDescription>
                 <FormMessage />
                 </FormItem>
@@ -88,22 +88,22 @@ export default function AiLogForm() {
             name="intencao_detectada"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Detected Intent</FormLabel>
+                <FormLabel>Intenção Detectada</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                     <SelectTrigger>
-                        <SelectValue placeholder="Select an intent" />
+                        <SelectValue placeholder="Selecione uma intenção" />
                     </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                    <SelectItem value="agendamento">Scheduling</SelectItem>
-                    <SelectItem value="duvida">Question</SelectItem>
-                    <SelectItem value="info">Information Request</SelectItem>
-                    <SelectItem value="outro">Other</SelectItem>
+                    <SelectItem value="agendamento">Agendamento</SelectItem>
+                    <SelectItem value="duvida">Dúvida</SelectItem>
+                    <SelectItem value="info">Pedido de Informação</SelectItem>
+                    <SelectItem value="outro">Outro</SelectItem>
                     </SelectContent>
                 </Select>
                  <FormDescription>
-                    The intent detected by the AI agent.
+                    A intenção detectada pelo agente de IA.
                 </FormDescription>
                 <FormMessage />
                 </FormItem>
@@ -116,9 +116,9 @@ export default function AiLogForm() {
           name="mensagem_usuario"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>User Message</FormLabel>
+              <FormLabel>Mensagem do Usuário</FormLabel>
               <FormControl>
-                <Textarea placeholder="e.g., 'I'd like to book an appointment for next week.'" {...field} />
+                <Textarea placeholder="ex: 'Gostaria de marcar uma consulta para a próxima semana.'" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -129,9 +129,9 @@ export default function AiLogForm() {
           name="resposta_ia"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>AI Response</FormLabel>
+              <FormLabel>Resposta da IA</FormLabel>
               <FormControl>
-                <Textarea placeholder="e.g., 'Of course! We have openings on Monday at 10 AM...'" {...field} />
+                <Textarea placeholder="ex: 'Claro! Temos horários disponíveis na segunda-feira às 10h...'" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -143,11 +143,11 @@ export default function AiLogForm() {
                 name="canal"
                 render={({ field }) => (
                     <FormItem className="w-1/3">
-                    <FormLabel>Channel</FormLabel>
+                    <FormLabel>Canal</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                         <SelectTrigger>
-                            <SelectValue placeholder="Select a channel" />
+                            <SelectValue placeholder="Selecione um canal" />
                         </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -162,7 +162,7 @@ export default function AiLogForm() {
                 />
             <Button type="submit" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Log
+                Salvar Log
             </Button>
         </div>
       </form>

@@ -22,15 +22,15 @@ export function RecordActions({ record }: RecordActionsProps) {
       <DropdownMenuTrigger asChild>
         <Button aria-haspopup="true" size="icon" variant="ghost">
           <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">Toggle menu</span>
+          <span className="sr-only">Abrir menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>Ações</DropdownMenuLabel>
         <ViewRecordDialog record={record}>
              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Eye className="mr-2 h-4 w-4" />
-              View Details
+              Ver Detalhes
             </DropdownMenuItem>
         </ViewRecordDialog>
       </DropdownMenuContent>

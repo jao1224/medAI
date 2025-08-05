@@ -9,13 +9,13 @@ export default function SettingsPage() {
           <div className="mx-auto bg-primary text-primary-foreground rounded-full p-4 w-fit mb-4">
             <Settings className="h-10 w-10" />
           </div>
-          <CardTitle className="font-headline mt-4 text-2xl">System Settings</CardTitle>
+          <CardTitle className="font-headline mt-4 text-2xl">Configurações do Sistema</CardTitle>
           <CardDescription className="text-base">
-            This feature is under construction. Soon you will be able to configure the system settings here.
+            Este recurso está em construção. Em breve você poderá configurar as definições do sistema aqui.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-lg font-semibold text-muted-foreground">Coming Soon!</p>
+          <p className="text-lg font-semibold text-muted-foreground">Em Breve!</p>
         </CardContent>
       </Card>
     </div>

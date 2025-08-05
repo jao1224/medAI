@@ -6,9 +6,9 @@ export default function RecordsPage() {
     <div className="grid auto-rows-max items-start gap-4 md:gap-8">
         <Card>
             <CardHeader>
-                <CardTitle className="font-headline">E-Health Records</CardTitle>
+                <CardTitle className="font-headline">Prontuários Eletrônicos</CardTitle>
                 <CardDescription>
-                    Browse and manage all electronic health records.
+                    Navegue e gerencie todos os prontuários eletrônicos de saúde.
                 </CardDescription>
             </CardHeader>
             <CardContent>

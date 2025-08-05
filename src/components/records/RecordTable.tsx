@@ -15,12 +15,12 @@ export function RecordTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Date</TableHead>
-          <TableHead>Patient</TableHead>
-          <TableHead>Professional</TableHead>
-          <TableHead>Type</TableHead>
+          <TableHead>Data</TableHead>
+          <TableHead>Paciente</TableHead>
+          <TableHead>Profissional</TableHead>
+          <TableHead>Tipo</TableHead>
            <TableHead>
-            <span className="sr-only">Actions</span>
+            <span className="sr-only">Ações</span>
           </TableHead>
         </TableRow>
       </TableHeader>

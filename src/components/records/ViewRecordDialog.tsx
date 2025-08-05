@@ -25,16 +25,16 @@ export function ViewRecordDialog({ record, children }: ViewRecordDialogProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Record Details</DialogTitle>
+          <DialogTitle>Detalhes do Prontuário</DialogTitle>
           <DialogDescription>
-            {record.tipo} for {record.pacienteNome} on {format(new Date(record.data), "PPP")}
+            {record.tipo} para {record.pacienteNome} em {format(new Date(record.data), "PPP")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4 text-sm">
-            <div className="font-medium">Professional</div>
+            <div className="font-medium">Profissional</div>
             <p className="text-muted-foreground">{record.profissionalNome}</p>
 
-            <div className="font-medium">Description</div>
+            <div className="font-medium">Descrição</div>
             <p className="text-muted-foreground bg-muted p-3 rounded-md">{record.descricao}</p>
         </div>
       </DialogContent>

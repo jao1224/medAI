@@ -52,21 +52,21 @@ export default function AppointmentsPage() {
       </div>
       <Card>
         <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <CardTitle className="font-headline">All Appointments</CardTitle>
+          <CardTitle className="font-headline">Todos os Agendamentos</CardTitle>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <div className="flex items-center gap-2">
               <Label htmlFor="professional-filter" className="text-sm font-medium whitespace-nowrap">
-                Professional
+                Profissional
               </Label>
               <Select
                 value={selectedProfessional}
-                onValueChange={setSelectedProfessional}
+                onValuechange={setSelectedProfessional}
               >
                 <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Select Professional" />
+                  <SelectValue placeholder="Selecione o Profissional" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Professionals</SelectItem>
+                  <SelectItem value="all">Todos os Profissionais</SelectItem>
                   {professionals.map((prof) => (
                     <SelectItem key={prof.uid} value={prof.uid}>
                       {prof.nome}
@@ -81,11 +81,11 @@ export default function AppointmentsPage() {
               />
               <Button variant="outline" size="sm">
                 <FileDown className="mr-2 h-4 w-4" />
-                Export PDF
+                Exportar PDF
               </Button>
               <Button variant="outline" size="sm">
                 <FileDown className="mr-2 h-4 w-4" />
-                Export XLSX
+                Exportar XLSX
               </Button>
             </div>
           </div>
