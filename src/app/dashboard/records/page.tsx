@@ -8,10 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { mockHealthRecords } from '@/lib/mock-data';
 import type { ElectronicHealthRecord } from '@/lib/types';
 import { useAuth } from '@/hooks/use-auth';
+import { AddPatientDialog } from '@/components/patients/AddPatientDialog';
+import { useUserData } from '@/hooks/use-user-data';
 
 export default function RecordsPage() {
   const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
   const { hasRole } = useAuth();
+  const { addUser } = useUserData();
 
   const handleRecordAdd = (newRecord: ElectronicHealthRecord) => {
     setRecords((prev) => [newRecord, ...prev]);
@@ -27,7 +30,10 @@ export default function RecordsPage() {
                         Navegue e gerencie todos os prontuários eletrônicos de saúde.
                     </CardDescription>
                 </div>
-                {hasRole('medico') && <AddRecordDialog onRecordAdd={handleRecordAdd} />}
+                <div className="flex gap-2">
+                    {hasRole('medico') && <AddPatientDialog onPatientAdd={addUser} />}
+                    {hasRole('medico') && <AddRecordDialog onRecordAdd={handleRecordAdd} />}
+                </div>
             </CardHeader>
             <CardContent>
                 <RecordTable records={records} />
