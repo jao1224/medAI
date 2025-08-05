@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -16,16 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockUsers, mockAppointments } from '@/lib/mock-data';
+import { mockAppointments } from '@/lib/mock-data';
 import { Label } from '@/components/ui/label';
 import type { Appointment } from '@/lib/types';
+import { useUserData } from '@/hooks/use-user-data';
 
 export default function AppointmentsPage() {
   const [selectedProfessional, setSelectedProfessional] = useState<string>('all');
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
-
-  const professionals = mockUsers.filter((user) => user.perfil === 'medico');
-  const patients = mockUsers.filter((user) => user.perfil === 'paciente');
+  const { patients, professionals } = useUserData();
   
   const handleAppointmentAdd = (newAppointment: Appointment) => {
     setAppointments((prev) => [...prev, newAppointment]);
