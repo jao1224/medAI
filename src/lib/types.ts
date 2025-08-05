@@ -8,6 +8,7 @@ export interface User {
   telefone?: string;
   data_nascimento?: string;
   endereco?: string;
+  plano_saude?: string;
   crm_cro?: string;
   perfil: UserProfile;
   criado_em?: string;

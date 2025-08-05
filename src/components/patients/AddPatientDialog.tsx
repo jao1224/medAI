@@ -33,6 +33,7 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
     const email = formData.get("email") as string;
     const phone = formData.get("phone") as string;
     const dob = formData.get("dob") as string;
+    const healthPlan = formData.get("healthPlan") as string;
 
     if (!name || !email) {
         toast({
@@ -49,6 +50,7 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
         email: email,
         telefone: phone,
         data_nascimento: dob,
+        plano_saude: healthPlan,
         perfil: "paciente",
         criado_em: new Date().toISOString(),
     };
@@ -103,6 +105,12 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
                 Data de Nasc.
               </Label>
               <Input name="dob" id="dob" type="date" defaultValue="1995-02-10" className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="healthPlan" className="text-right">
+                Plano de Saúde
+              </Label>
+              <Input name="healthPlan" id="healthPlan" defaultValue="Amil" className="col-span-3" />
             </div>
           </div>
           <DialogFooter>

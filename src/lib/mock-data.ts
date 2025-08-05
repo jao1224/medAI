@@ -34,6 +34,7 @@ export const mockUsers: User[] = [
     telefone: "11999998888",
     data_nascimento: "1990-05-20",
     endereco: "Rua das Flores, 123, São Paulo, SP",
+    plano_saude: "Bradesco Saúde",
     criado_em: "2024-02-15T14:30:00Z"
   },
   {
@@ -44,6 +45,7 @@ export const mockUsers: User[] = [
     telefone: "11977776666",
     data_nascimento: "1985-11-30",
     endereco: "Av. Paulista, 1500, São Paulo, SP",
+    plano_saude: "SulAmérica",
     criado_em: "2024-03-10T11:00:00Z"
   },
    {
@@ -54,6 +56,7 @@ export const mockUsers: User[] = [
     telefone: "11966665555",
     data_nascimento: "2001-01-15",
     endereco: "Rua da Consolação, 900, São Paulo, SP",
+    plano_saude: "Amil",
     criado_em: "2024-05-20T09:00:00Z"
   },
   {

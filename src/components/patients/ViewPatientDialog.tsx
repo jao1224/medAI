@@ -12,7 +12,7 @@ import type { User } from "@/lib/types";
 import { format } from "date-fns";
 import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Mail, Phone, Home, Cake } from 'lucide-react';
+import { Mail, Phone, Home, Cake, ShieldCheck } from 'lucide-react';
 
 interface ViewPatientDialogProps {
   patient: User;
@@ -62,6 +62,7 @@ export function ViewPatientDialog({ patient, isOpen, onOpenChange }: ViewPatient
                 <DetailItem icon={Phone} label="Telefone" value={patient.telefone} />
                 <DetailItem icon={Cake} label="Data de Nascimento" value={patient.data_nascimento ? format(new Date(patient.data_nascimento), "PPP") : undefined} />
                 <DetailItem icon={Home} label="Endereço" value={patient.endereco} />
+                <DetailItem icon={ShieldCheck} label="Plano de Saúde" value={patient.plano_saude} />
             </div>
         </ScrollArea>
       </DialogContent>

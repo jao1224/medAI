@@ -22,7 +22,7 @@ import { DialogTrigger } from "@/components/ui/dialog";
 import type { User, ElectronicHealthRecord } from "@/lib/types";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, ShieldCheck } from 'lucide-react';
 
 interface PatientRecordsDialogProps {
   patient: User;
@@ -63,6 +63,7 @@ export function PatientRecordsDialog({ patient, records, isOpen, onOpenChange, o
                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-sm text-muted-foreground">
                         <DetailItem icon={Mail} label="Email" value={patient.email} />
                         <DetailItem icon={Phone} label="Telefone" value={patient.telefone} />
+                        <DetailItem icon={ShieldCheck} label="Plano de Saúde" value={patient.plano_saude} />
                     </div>
                 </div>
            </div>
