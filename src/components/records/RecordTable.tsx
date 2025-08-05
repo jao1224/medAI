@@ -6,11 +6,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { mockHealthRecords } from "@/lib/mock-data";
 import { format } from "date-fns";
 import { RecordActions } from "./RecordActions";
+import type { ElectronicHealthRecord } from "@/lib/types";
 
-export function RecordTable() {
+interface RecordTableProps {
+  records: ElectronicHealthRecord[];
+}
+
+export function RecordTable({ records }: RecordTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -25,7 +29,7 @@ export function RecordTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {mockHealthRecords.map((record) => (
+        {records.map((record) => (
           <TableRow key={record.id}>
              <TableCell>{format(new Date(record.data), "PPP")}</TableCell>
             <TableCell className="font-medium">{record.pacienteNome}</TableCell>
