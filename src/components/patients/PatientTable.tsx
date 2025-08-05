@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import type { User, ElectronicHealthRecord, Appointment } from "@/lib/types";
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { ViewPatientDialog } from './ViewPatientDialog';
 
@@ -29,15 +29,16 @@ export function PatientTable({
 }: PatientTableProps) {
   const router = useRouter();
   const { user, hasRole, loading } = useAuth();
-
+  const [selectedPatient, setSelectedPatient] = useState<User | null>(null);
 
   const handleRowClick = (patient: User) => {
     if (hasRole('medico')) {
         router.push(`/dashboard/records?patientId=${patient.uid}`);
+    } else {
+        setSelectedPatient(patient);
     }
-    // For other roles, the dialog is triggered by the ViewPatientDialog component
   };
-
+  
   const filteredPatients = useMemo(() => {
     if (hasRole('medico') && user) {
       const doctorPatientIdsFromAppointments = new Set(
@@ -61,41 +62,46 @@ export function PatientTable({
   if(loading) return <p>Carregando...</p>;
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Nome</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Telefone</TableHead>
-          <TableHead>Data de Nascimento</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {filteredPatients.map((patient) => (
-            <TableRow 
-                key={patient.uid} 
-                onClick={() => handleRowClick(patient)}
-                className={hasRole('medico') ? "cursor-pointer" : ""}
-            >
-                <TableCell className="font-medium">
-                    {hasRole('medico') ? (
-                        patient.nome
-                    ) : (
-                        <ViewPatientDialog patient={patient}>
-                            <span className="cursor-pointer text-primary underline-offset-4 hover:underline">{patient.nome}</span>
-                        </ViewPatientDialog>
-                    )}
-                </TableCell>
-                <TableCell>{patient.email}</TableCell>
-                <TableCell>{patient.telefone}</TableCell>
-                <TableCell>
-                    {patient.data_nascimento ? format(new Date(patient.data_nascimento), "PPP") : '-'}
-                </TableCell>
-            </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nome</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Telefone</TableHead>
+            <TableHead>Data de Nascimento</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredPatients.map((patient) => (
+              <TableRow 
+                  key={patient.uid} 
+                  onClick={() => handleRowClick(patient)}
+                  className="cursor-pointer"
+              >
+                  <TableCell className="font-medium">
+                    <span className="text-primary underline-offset-4 hover:underline">{patient.nome}</span>
+                  </TableCell>
+                  <TableCell>{patient.email}</TableCell>
+                  <TableCell>{patient.telefone}</TableCell>
+                  <TableCell>
+                      {patient.data_nascimento ? format(new Date(patient.data_nascimento), "PPP") : '-'}
+                  </TableCell>
+              </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {selectedPatient && !hasRole('medico') && (
+        <ViewPatientDialog 
+          patient={selectedPatient}
+          isOpen={!!selectedPatient}
+          onOpenChange={(isOpen) => {
+            if(!isOpen) {
+              setSelectedPatient(null);
+            }
+          }}
+        />
+      )}
+    </>
   );
 }
-
-

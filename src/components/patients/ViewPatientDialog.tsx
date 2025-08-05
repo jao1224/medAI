@@ -1,14 +1,12 @@
 
 "use client";
 
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import type { User } from "@/lib/types";
 import { format } from "date-fns";
@@ -18,7 +16,8 @@ import { Mail, Phone, Home, Cake } from 'lucide-react';
 
 interface ViewPatientDialogProps {
   patient: User;
-  children: React.ReactNode;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
 }
 
 const DetailItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value?: string }) => (
@@ -32,8 +31,7 @@ const DetailItem = ({ icon: Icon, label, value }: { icon: React.ElementType, lab
 );
 
 
-export function ViewPatientDialog({ patient, children }: ViewPatientDialogProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export function ViewPatientDialog({ patient, isOpen, onOpenChange }: ViewPatientDialogProps) {
 
   const getInitials = (name: string) => {
     const names = name.split(' ');
@@ -44,8 +42,7 @@ export function ViewPatientDialog({ patient, children }: ViewPatientDialogProps)
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader className="flex-row items-center gap-4">
             <Avatar className="h-16 w-16">
