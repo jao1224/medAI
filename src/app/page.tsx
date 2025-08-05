@@ -67,7 +67,7 @@ export default function LoginPage() {
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              Dica: Use `admin@clinica.com` ou `joao@clinica.com`. Qualquer senha funcionará.
+              Dica: Use `admin@clinica.com`, `joao@clinica.com` ou `sofia@clinica.com`. Qualquer senha funcionará.
             </p>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? <Loader2 className="animate-spin" /> : 'Entrar'}
