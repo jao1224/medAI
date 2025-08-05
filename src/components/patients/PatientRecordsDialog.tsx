@@ -21,6 +21,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { DialogTrigger } from "@/components/ui/dialog";
 import type { User, ElectronicHealthRecord } from "@/lib/types";
 import { format } from "date-fns";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Mail, Phone } from 'lucide-react';
 
 interface PatientRecordsDialogProps {
   patient: User;
@@ -30,14 +32,41 @@ interface PatientRecordsDialogProps {
   onRecordUpdate: (record: ElectronicHealthRecord) => void;
 }
 
+const DetailItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value?: string }) => (
+    <div className="flex items-center gap-2">
+        <Icon className="h-4 w-4 text-muted-foreground" />
+        <span className="font-medium">{value || 'Não informado'}</span>
+    </div>
+);
+
+const getInitials = (name: string) => {
+    const names = name.split(' ');
+    if (names.length > 1) {
+      return `${names[0][0]}${names[names.length - 1][0]}`;
+    }
+    return name.substring(0, 2);
+};
+
 export function PatientRecordsDialog({ patient, records, isOpen, onOpenChange, onRecordUpdate }: PatientRecordsDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="font-headline text-2xl">Prontuários de {patient.nome}</DialogTitle>
-          <DialogDescription>
+           <div className="flex items-center gap-4">
+               <Avatar className="h-16 w-16">
+                    <AvatarImage src={`https://placehold.co/64x64.png`} alt={patient.nome} data-ai-hint="profile avatar" />
+                    <AvatarFallback className="text-xl">{getInitials(patient.nome)}</AvatarFallback>
+                </Avatar>
+                <div>
+                    <DialogTitle className="font-headline text-2xl mb-1">{patient.nome}</DialogTitle>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-sm text-muted-foreground">
+                        <DetailItem icon={Mail} label="Email" value={patient.email} />
+                        <DetailItem icon={Phone} label="Telefone" value={patient.telefone} />
+                    </div>
+                </div>
+           </div>
+          <DialogDescription className="mt-2">
             Lista de todos os registros médicos e consultas do paciente.
           </DialogDescription>
         </DialogHeader>
