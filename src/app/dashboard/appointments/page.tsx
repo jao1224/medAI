@@ -25,7 +25,7 @@ import { useUserData } from '@/hooks/use-user-data';
 export default function AppointmentsPage() {
   const [selectedProfessional, setSelectedProfessional] = useState<string>('all');
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
-  const { patients, professionals } = useUserData();
+  const { professionals } = useUserData();
   
   const handleAppointmentAdd = (newAppointment: Appointment) => {
     setAppointments((prev) => [...prev, newAppointment]);
@@ -78,8 +78,6 @@ export default function AppointmentsPage() {
             <div className="flex gap-2">
               <AddAppointmentDialog 
                 onAppointmentAdd={handleAppointmentAdd}
-                patients={patients}
-                professionals={professionals}
               />
               <Button variant="outline" size="sm">
                 <FileDown className="mr-2 h-4 w-4" />

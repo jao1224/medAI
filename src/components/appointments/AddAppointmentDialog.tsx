@@ -27,30 +27,37 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import type { Appointment, User } from "@/lib/types";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useUserData } from "@/hooks/use-user-data";
 
 interface AddAppointmentDialogProps {
   onAppointmentAdd: (newAppointment: Appointment) => void;
-  patients: User[];
-  professionals: User[];
 }
 
 const appointmentSchema = z.object({
     patientId: z.string({ required_error: "Please select a patient." }),
     professionalId: z.string({ required_error: "Please select a professional." }),
     date: z.date({ required_error: "Please select a date." }),
-    time: z.string({ required_error: "Please select a time." }),
+    time: z.string({ required_error: "Please select a time." }).min(1, 'Time is required'),
     type: z.enum(["consulta", "exame", "procedimento"], { required_error: "Please select a type." }),
 });
 
 type AppointmentFormValues = z.infer<typeof appointmentSchema>;
 
-export function AddAppointmentDialog({ onAppointmentAdd, patients, professionals }: AddAppointmentDialogProps) {
+export function AddAppointmentDialog({ onAppointmentAdd }: AddAppointmentDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   const { user, hasRole } = useAuth();
+  const { patients, professionals } = useUserData();
   
   const form = useForm<AppointmentFormValues>({
     resolver: zodResolver(appointmentSchema),
+    defaultValues: {
+      patientId: undefined,
+      professionalId: undefined,
+      date: undefined,
+      time: "",
+      type: undefined,
+    }
   });
 
   const canAdd = hasRole(['admin', 'recepcionista']);
