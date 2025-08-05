@@ -107,7 +107,7 @@ export function AddRecordDialog({ onRecordAdd }: AddRecordDialogProps) {
       }
     }}>
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
           Criar Prontuário
         </Button>
