@@ -60,7 +60,7 @@ export default function AppointmentsPage() {
               </Label>
               <Select
                 value={selectedProfessional}
-                onValuechange={setSelectedProfessional}
+                onValueChange={setSelectedProfessional}
               >
                 <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Selecione o Profissional" />
