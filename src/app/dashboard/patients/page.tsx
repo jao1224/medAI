@@ -7,13 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useUserData } from '@/hooks/use-user-data';
 import { useAuth } from "@/hooks/use-auth";
 import { mockAppointments, mockHealthRecords } from "@/lib/mock-data";
+import type { ElectronicHealthRecord } from "@/lib/types";
 
 
 export default function PatientsPage() {
   const { patients, addUser } = useUserData();
   const { user, hasRole } = useAuth();
 
-  const getFilteredPatients = () => {
+  const getFilteredPatients = (records: ElectronicHealthRecord[]) => {
     if (hasRole('medico') && user) {
       const doctorPatientIdsFromAppointments = new Set(
         mockAppointments
@@ -21,7 +22,7 @@ export default function PatientsPage() {
           .map(appt => appt.pacienteId)
       );
       const doctorPatientIdsFromRecords = new Set(
-        mockHealthRecords
+        records
             .filter(record => record.profissionalId === user.uid)
             .map(record => record.pacienteId)
       );
@@ -33,6 +34,9 @@ export default function PatientsPage() {
     return patients;
   }
 
+  // This page is no longer directly used in the navigation, 
+  // but its logic is preserved for potential future use or modularity.
+  // The functionality is now integrated into the records page.
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8">
         <Card>
@@ -44,7 +48,7 @@ export default function PatientsPage() {
                  <AddPatientDialog onPatientAdd={addUser} />
             </CardHeader>
             <CardContent>
-                <PatientTable patients={getFilteredPatients()} />
+                <PatientTable patients={getFilteredPatients(mockHealthRecords)} />
             </CardContent>
         </Card>
     </div>
