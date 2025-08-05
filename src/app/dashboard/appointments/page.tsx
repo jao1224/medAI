@@ -2,7 +2,8 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AppointmentTable } from '@/components/appointments/AppointmentTable';
@@ -26,17 +27,18 @@ export default function AppointmentsPage() {
   const [selectedProfessional, setSelectedProfessional] = useState<string>('all');
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
   const { professionals } = useUserData();
+  const searchParams = useSearchParams();
+  const patientIdFromQuery = searchParams.get('patientId');
   
   const handleAppointmentAdd = (newAppointment: Appointment) => {
     setAppointments((prev) => [...prev, newAppointment]);
   };
 
-  const filteredAppointments =
-    selectedProfessional && selectedProfessional !== 'all'
-      ? appointments.filter(
-          (appt) => appt.profissionalId === selectedProfessional
-        )
-      : appointments;
+  const filteredAppointments = appointments.filter(appointment => {
+    const professionalMatch = selectedProfessional === 'all' || appointment.profissionalId === selectedProfessional;
+    const patientMatch = !patientIdFromQuery || appointment.pacienteId === patientIdFromQuery;
+    return professionalMatch && patientMatch;
+  });
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">

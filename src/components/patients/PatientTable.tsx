@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import {
   Table,
   TableBody,
@@ -14,6 +17,12 @@ interface PatientTableProps {
 }
 
 export function PatientTable({ patients }: PatientTableProps) {
+  const router = useRouter();
+
+  const handleRowClick = (patientId: string) => {
+    router.push(`/dashboard/appointments?patientId=${patientId}`);
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -26,7 +35,11 @@ export function PatientTable({ patients }: PatientTableProps) {
       </TableHeader>
       <TableBody>
         {patients.map((patient) => (
-          <TableRow key={patient.uid}>
+          <TableRow 
+            key={patient.uid} 
+            onClick={() => handleRowClick(patient.uid)}
+            className="cursor-pointer"
+          >
             <TableCell className="font-medium">{patient.nome}</TableCell>
             <TableCell>{patient.email}</TableCell>
             <TableCell>{patient.telefone}</TableCell>
