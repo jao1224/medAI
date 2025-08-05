@@ -32,7 +32,7 @@ export function PatientTable({
   const router = useRouter();
 
   const handleRowClick = (patientId: string) => {
-    router.push(`/dashboard/appointments?patientId=${patientId}`);
+    router.push(`/dashboard/records?patientId=${patientId}`);
   };
 
   const filteredPatients = useMemo(() => {

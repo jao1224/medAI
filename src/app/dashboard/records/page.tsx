@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { RecordTable } from "@/components/records/RecordTable";
 import { AddRecordDialog } from '@/components/records/AddRecordDialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,7 +15,9 @@ import { useUserData } from '@/hooks/use-user-data';
 export default function RecordsPage() {
   const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
   const { user, hasRole, loading } = useAuth();
-  const { addUser } = useUserData();
+  const { patients, addUser } = useUserData();
+  const searchParams = useSearchParams();
+  const patientIdFromQuery = searchParams.get('patientId');
 
   const handleRecordAdd = (newRecord: ElectronicHealthRecord) => {
     setRecords((prev) => [newRecord, ...prev]);
@@ -24,9 +27,15 @@ export default function RecordsPage() {
     return <div>Carregando...</div>
   }
 
-  const filteredRecords = hasRole('medico') && user 
-    ? records.filter(record => record.profissionalId === user.uid)
-    : records;
+  const patientName = patientIdFromQuery 
+    ? patients.find(p => p.uid === patientIdFromQuery)?.nome 
+    : null;
+
+  const filteredRecords = records.filter(record => {
+    const doctorMatch = !hasRole('medico') || !user || record.profissionalId === user.uid;
+    const patientMatch = !patientIdFromQuery || record.pacienteId === patientIdFromQuery;
+    return doctorMatch && patientMatch;
+  });
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8">
@@ -35,7 +44,10 @@ export default function RecordsPage() {
                 <div>
                     <CardTitle className="font-headline">Prontuários Eletrônicos</CardTitle>
                     <CardDescription>
-                        Navegue e gerencie todos os prontuários eletrônicos de saúde.
+                        {patientName
+                            ? `Exibindo prontuários para ${patientName}.`
+                            : "Navegue e gerencie todos os prontuários eletrônicos de saúde."
+                        }
                     </CardDescription>
                 </div>
                 <div className="flex gap-2">
