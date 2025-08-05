@@ -67,6 +67,7 @@ export function PatientTable({
             <TableHead>Nome</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Telefone</TableHead>
+            <TableHead>Plano de Saúde</TableHead>
             <TableHead>Data de Nascimento</TableHead>
           </TableRow>
         </TableHeader>
@@ -82,6 +83,7 @@ export function PatientTable({
                   </TableCell>
                   <TableCell>{patient.email}</TableCell>
                   <TableCell>{patient.telefone}</TableCell>
+                  <TableCell>{patient.plano_saude || '-'}</TableCell>
                   <TableCell>
                       {patient.data_nascimento ? format(new Date(patient.data_nascimento), "PPP") : '-'}
                   </TableCell>
