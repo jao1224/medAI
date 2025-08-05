@@ -22,11 +22,13 @@ import { mockAppointments } from '@/lib/mock-data';
 import { Label } from '@/components/ui/label';
 import type { Appointment } from '@/lib/types';
 import { useUserData } from '@/hooks/use-user-data';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function AppointmentsPage() {
   const [selectedProfessional, setSelectedProfessional] = useState<string>('all');
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
   const { professionals } = useUserData();
+  const { user, hasRole } = useAuth();
   const searchParams = useSearchParams();
   const patientIdFromQuery = searchParams.get('patientId');
   
@@ -37,7 +39,8 @@ export default function AppointmentsPage() {
   const filteredAppointments = appointments.filter(appointment => {
     const professionalMatch = selectedProfessional === 'all' || appointment.profissionalId === selectedProfessional;
     const patientMatch = !patientIdFromQuery || appointment.pacienteId === patientIdFromQuery;
-    return professionalMatch && patientMatch;
+    const doctorMatch = !hasRole('medico') || appointment.profissionalId === user?.uid;
+    return professionalMatch && patientMatch && doctorMatch;
   });
 
   return (
@@ -56,27 +59,29 @@ export default function AppointmentsPage() {
         <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <CardTitle className="font-headline">Todos os Agendamentos</CardTitle>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
-            <div className="flex items-center gap-2">
-              <Label htmlFor="professional-filter" className="text-sm font-medium whitespace-nowrap">
-                Profissional
-              </Label>
-              <Select
-                value={selectedProfessional}
-                onValueChange={setSelectedProfessional}
-              >
-                <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Selecione o Profissional" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos os Profissionais</SelectItem>
-                  {professionals.map((prof) => (
-                    <SelectItem key={prof.uid} value={prof.uid}>
-                      {prof.nome}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {!hasRole('medico') && (
+              <div className="flex items-center gap-2">
+                <Label htmlFor="professional-filter" className="text-sm font-medium whitespace-nowrap">
+                  Profissional
+                </Label>
+                <Select
+                  value={selectedProfessional}
+                  onValueChange={setSelectedProfessional}
+                >
+                  <SelectTrigger className="w-full sm:w-[180px]">
+                    <SelectValue placeholder="Selecione o Profissional" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos os Profissionais</SelectItem>
+                    {professionals.map((prof) => (
+                      <SelectItem key={prof.uid} value={prof.uid}>
+                        {prof.nome}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="flex gap-2">
               <AddAppointmentDialog 
                 onAppointmentAdd={handleAppointmentAdd}
