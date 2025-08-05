@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, CalendarClock, Bot } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { runFlow } from '@genkit-ai/flow/client';
+import { runFlow } from '@genkit-ai/next/client';
 import { suggestAppointmentTimes, type SuggestAppointmentTimesOutput } from '@/ai/flows/suggest-appointment-times';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 

@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import type { Appointment } from '@/lib/types';
-import { runFlow } from '@genkit-ai/flow/client';
+import { runFlow } from '@genkit-ai/next/client';
 import { autoDraftMessage } from '@/ai/flows/auto-draft-messages';
 import { Bot, Clipboard, Loader2, Send } from 'lucide-react';
 import { format } from 'date-fns';
