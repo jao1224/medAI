@@ -15,28 +15,26 @@ import type { User, ElectronicHealthRecord, Appointment } from "@/lib/types";
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { ViewPatientDialog } from './ViewPatientDialog';
+import { PatientRecordsDialog } from './PatientRecordsDialog';
 
 interface PatientTableProps {
     allPatients: User[];
     allRecords: ElectronicHealthRecord[];
     allAppointments: Appointment[];
+    onRecordUpdate: (record: ElectronicHealthRecord) => void;
 }
 
 export function PatientTable({ 
     allPatients, 
     allRecords, 
     allAppointments,
+    onRecordUpdate,
 }: PatientTableProps) {
-  const router = useRouter();
   const { user, hasRole, loading } = useAuth();
   const [selectedPatient, setSelectedPatient] = useState<User | null>(null);
 
   const handleRowClick = (patient: User) => {
-    if (hasRole('medico')) {
-        router.push(`/dashboard/records?patientId=${patient.uid}`);
-    } else {
-        setSelectedPatient(patient);
-    }
+    setSelectedPatient(patient);
   };
   
   const filteredPatients = useMemo(() => {
@@ -91,16 +89,27 @@ export function PatientTable({
           ))}
         </TableBody>
       </Table>
-      {selectedPatient && !hasRole('medico') && (
-        <ViewPatientDialog 
-          patient={selectedPatient}
-          isOpen={!!selectedPatient}
-          onOpenChange={(isOpen) => {
-            if(!isOpen) {
-              setSelectedPatient(null);
-            }
-          }}
-        />
+      
+      {selectedPatient && (
+        hasRole('medico') ? (
+            <PatientRecordsDialog
+                patient={selectedPatient}
+                records={allRecords.filter(r => r.pacienteId === selectedPatient.uid && r.profissionalId === user?.uid)}
+                isOpen={!!selectedPatient}
+                onOpenChange={(isOpen) => {
+                    if(!isOpen) setSelectedPatient(null);
+                }}
+                onRecordUpdate={onRecordUpdate}
+            />
+        ) : (
+            <ViewPatientDialog 
+                patient={selectedPatient}
+                isOpen={!!selectedPatient}
+                onOpenChange={(isOpen) => {
+                    if(!isOpen) setSelectedPatient(null);
+                }}
+            />
+        )
       )}
     </>
   );

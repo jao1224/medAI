@@ -8,13 +8,22 @@ import { useUserData } from '@/hooks/use-user-data';
 import { useAuth } from "@/hooks/use-auth";
 import { mockAppointments, mockHealthRecords } from "@/lib/mock-data";
 import { useState } from "react";
-import type { ElectronicHealthRecord, User } from "@/lib/types";
+import type { Appointment, ElectronicHealthRecord, User } from "@/lib/types";
 
 
 export default function PatientsPage() {
   const { patients, addUser } = useUserData();
   const { hasRole, loading } = useAuth();
   const [records, setRecords] = useState<ElectronicHealthRecord[]>(mockHealthRecords);
+  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
+
+  const handleRecordUpdate = (updatedRecord: ElectronicHealthRecord) => {
+    setRecords((prev) => 
+      prev.map((record) => 
+        record.id === updatedRecord.id ? updatedRecord : record
+      )
+    );
+  };
 
   if (loading) {
     return <div>Carregando...</div>
@@ -39,7 +48,8 @@ export default function PatientsPage() {
                 <PatientTable 
                     allPatients={patients} 
                     allRecords={records}
-                    allAppointments={mockAppointments}
+                    allAppointments={appointments}
+                    onRecordUpdate={handleRecordUpdate}
                 />
             </CardContent>
         </Card>
