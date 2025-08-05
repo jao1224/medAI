@@ -63,6 +63,18 @@ export const mockUsers: User[] = [
     criado_em: "2024-05-20T09:00:00Z"
   },
   {
+    uid: "paciente004",
+    nome: "Andre Santos",
+    email: "andre@paciente.com",
+    perfil: "paciente",
+    cpf: "444.555.666-77",
+    telefone: "11955554444",
+    data_nascimento: "1992-08-25",
+    endereco: "Rua Augusta, 500, São Paulo, SP",
+    plano_saude: "Porto Seguro",
+    criado_em: "2024-07-20T10:00:00Z"
+  },
+  {
     uid: "recepcionista001",
     nome: "Sofia Recepcionista",
     email: "sofia@clinica.com",
@@ -169,4 +181,18 @@ export const mockHealthRecords: ElectronicHealthRecord[] = [
     conduta: "Raio-X panorâmico da arcada dentária não mostrou cáries ou outras anormalidades. Retorno em 6 meses.",
     criado_em: "2024-08-16T14:30:00"
   },
+  {
+    id: "rec004",
+    pacienteId: "paciente004",
+    pacienteNome: "Andre Santos",
+    profissionalId: "medico002",
+    profissionalNome: "Dra. Ana Dentista",
+    data: "2024-07-22T15:00:00",
+    tipo: "consulta",
+    anamnese: "Paciente queixa-se de sensibilidade no dente 24 ao ingerir alimentos frios.",
+    exameFisico: "Dente 24 apresenta leve retração gengival. Teste de vitalidade pulpar positivo.",
+    hipoteseDiagnostica: "Hipersensibilidade dentinária.",
+    conduta: "Aplicação de verniz fluoretado no dente 24 e orientação sobre uso de creme dental para dentes sensíveis.",
+    criado_em: "2024-07-22T15:30:00"
+  }
 ];
