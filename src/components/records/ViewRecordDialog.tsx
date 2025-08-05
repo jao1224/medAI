@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { ElectronicHealthRecord } from "@/lib/types";
+import type { ElectronicHealthRecord, User } from "@/lib/types";
 import { format } from "date-fns";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
@@ -20,6 +20,7 @@ import { EditRecordDialog } from "./EditRecordDialog";
 
 interface ViewRecordDialogProps {
   record: ElectronicHealthRecord;
+  patient: User;
   onRecordUpdate: (record: ElectronicHealthRecord) => void;
   children: React.ReactNode;
 }
@@ -32,7 +33,7 @@ const RecordDetailItem = ({ label, value }: { label: string, value: string }) =>
 );
 
 
-export function ViewRecordDialog({ record, onRecordUpdate, children }: ViewRecordDialogProps) {
+export function ViewRecordDialog({ record, patient, onRecordUpdate, children }: ViewRecordDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -42,7 +43,8 @@ export function ViewRecordDialog({ record, onRecordUpdate, children }: ViewRecor
         <DialogHeader>
           <DialogTitle className="font-headline">Detalhes do Prontuário</DialogTitle>
           <DialogDescription>
-            {record.tipo} de {record.pacienteNome} em {format(new Date(record.data), "PPP")}
+            <span className="capitalize">{record.tipo}</span> de {record.pacienteNome} em {format(new Date(record.data), "PPP")}
+            <p className="text-xs">CPF: {patient.cpf || 'Não informado'} | Plano: {patient.plano_saude || 'Não informado'}</p>
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh]">

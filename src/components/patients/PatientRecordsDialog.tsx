@@ -77,18 +77,16 @@ export function PatientRecordsDialog({ patient, records, isOpen, onOpenChange, o
                     <TableRow>
                         <TableHead>Data</TableHead>
                         <TableHead>Tipo</TableHead>
-                        <TableHead>Profissional</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {records.length > 0 ? (
                         records.map((record) => (
-                            <ViewRecordDialog record={record} onRecordUpdate={onRecordUpdate} key={record.id}>
+                            <ViewRecordDialog record={record} patient={patient} onRecordUpdate={onRecordUpdate} key={record.id}>
                                 <DialogTrigger asChild>
                                     <TableRow className="cursor-pointer">
                                         <TableCell>{format(new Date(record.data), "PPP")}</TableCell>
                                         <TableCell className="capitalize">{record.tipo}</TableCell>
-                                        <TableCell>{record.profissionalNome}</TableCell>
                                     </TableRow>
                                 </DialogTrigger>
                             </ViewRecordDialog>

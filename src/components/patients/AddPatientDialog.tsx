@@ -34,6 +34,7 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
     const phone = formData.get("phone") as string;
     const dob = formData.get("dob") as string;
     const healthPlan = formData.get("healthPlan") as string;
+    const cpf = formData.get("cpf") as string;
 
     if (!name || !email) {
         toast({
@@ -48,6 +49,7 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
         uid: `paciente${Date.now()}`,
         nome: name,
         email: email,
+        cpf: cpf,
         telefone: phone,
         data_nascimento: dob,
         plano_saude: healthPlan,
@@ -105,6 +107,12 @@ export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
                 Data de Nasc.
               </Label>
               <Input name="dob" id="dob" type="date" defaultValue="1995-02-10" className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="cpf" className="text-right">
+                CPF
+              </Label>
+              <Input name="cpf" id="cpf" defaultValue="111.222.333-44" className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="healthPlan" className="text-right">

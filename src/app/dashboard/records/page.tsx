@@ -54,8 +54,8 @@ export default function RecordsPage() {
     );
   }
 
-  const patientName = patientIdFromQuery 
-    ? patients.find(p => p.uid === patientIdFromQuery)?.nome 
+  const patient = patientIdFromQuery 
+    ? patients.find(p => p.uid === patientIdFromQuery)
     : null;
 
   const filteredRecords = records.filter(record => {
@@ -72,8 +72,8 @@ export default function RecordsPage() {
                 <div>
                     <CardTitle className="font-headline">Prontuários Eletrônicos</CardTitle>
                     <CardDescription>
-                        {patientName
-                            ? `Exibindo prontuários para ${patientName}.`
+                        {patient?.nome
+                            ? `Exibindo prontuários para ${patient.nome}.`
                             : "Navegue e gerencie todos os seus prontuários eletrônicos de saúde."
                         }
                     </CardDescription>
@@ -84,7 +84,11 @@ export default function RecordsPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <RecordTable records={filteredRecords} onRecordUpdate={handleRecordUpdate} />
+                <RecordTable 
+                  records={filteredRecords} 
+                  onRecordUpdate={handleRecordUpdate} 
+                  patients={patients}
+                />
             </CardContent>
         </Card>
     </div>
