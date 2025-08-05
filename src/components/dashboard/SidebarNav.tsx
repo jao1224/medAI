@@ -20,7 +20,7 @@ const navItems = [
   { href: '/dashboard', label: 'Painel', icon: Home, roles: ['admin', 'medico', 'recepcionista', 'paciente'] },
   { href: '/dashboard/appointments', label: 'Agendamentos', icon: Calendar, roles: ['admin', 'medico', 'recepcionista', 'paciente'] },
   { href: '/dashboard/patients', label: 'Pacientes', icon: Users, roles: ['admin', 'medico', 'recepcionista'] },
-  { href: '/dashboard/records', label: 'Prontuários', icon: FileText, roles: ['medico'] },
+  { href: '/dashboard/records', label: 'Prontuários', icon: FileText, roles: ['medico', 'admin'] },
   { href: '/dashboard/financial', label: 'Financeiro', icon: CreditCard, roles: ['admin', 'recepcionista'] },
   { href: '/dashboard/reports', label: 'Relatórios', icon: BarChart3, roles: ['admin'] },
   { href: '/dashboard/ai-logs', label: 'Logs da IA', icon: BotMessageSquare, roles: ['admin', 'recepcionista'] },
