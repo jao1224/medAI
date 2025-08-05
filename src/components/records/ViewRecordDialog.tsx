@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import type { ElectronicHealthRecord } from "@/lib/types";
 import { format } from "date-fns";
@@ -31,7 +30,7 @@ export function ViewRecordDialog({ record, children }: ViewRecordDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      {children}
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-headline">Detalhes do Prontuário</DialogTitle>

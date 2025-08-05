@@ -1,3 +1,6 @@
+
+'use client';
+
 import {
   Table,
   TableBody,
@@ -7,8 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import { RecordActions } from "./RecordActions";
 import type { ElectronicHealthRecord } from "@/lib/types";
+import { ViewRecordDialog } from "./ViewRecordDialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+
 
 interface RecordTableProps {
   records: ElectronicHealthRecord[];
@@ -23,22 +28,20 @@ export function RecordTable({ records }: RecordTableProps) {
           <TableHead>Paciente</TableHead>
           <TableHead>Profissional</TableHead>
           <TableHead>Tipo</TableHead>
-           <TableHead className="w-[100px]">
-            <span className="sr-only">Ações</span>
-          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {records.map((record) => (
-          <TableRow key={record.id}>
-             <TableCell>{format(new Date(record.data), "PPP")}</TableCell>
-            <TableCell className="font-medium">{record.pacienteNome}</TableCell>
-            <TableCell>{record.profissionalNome}</TableCell>
-            <TableCell className="capitalize">{record.tipo}</TableCell>
-            <TableCell>
-                <RecordActions record={record} />
-            </TableCell>
-          </TableRow>
+          <ViewRecordDialog record={record} key={record.id}>
+            <DialogTrigger asChild>
+              <TableRow className="cursor-pointer">
+                <TableCell>{format(new Date(record.data), "PPP")}</TableCell>
+                <TableCell className="font-medium">{record.pacienteNome}</TableCell>
+                <TableCell>{record.profissionalNome}</TableCell>
+                <TableCell className="capitalize">{record.tipo}</TableCell>
+              </TableRow>
+            </DialogTrigger>
+          </ViewRecordDialog>
         ))}
       </TableBody>
     </Table>

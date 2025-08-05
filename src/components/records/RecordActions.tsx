@@ -18,22 +18,11 @@ interface RecordActionsProps {
 export function RecordActions({ record }: RecordActionsProps) {
   
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <ViewRecordDialog record={record}>
         <Button aria-haspopup="true" size="icon" variant="ghost">
           <MoreHorizontal className="h-4 w-4" />
           <span className="sr-only">Abrir menu</span>
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Ações</DropdownMenuLabel>
-        <ViewRecordDialog record={record}>
-             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <Eye className="mr-2 h-4 w-4" />
-              Ver Detalhes
-            </DropdownMenuItem>
-        </ViewRecordDialog>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    </ViewRecordDialog>
   );
 }
