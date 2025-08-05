@@ -46,9 +46,11 @@ export default function AppointmentsPage() {
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-        <div className="sm:col-span-2 grid gap-4">
-          <SchedulingAssistant />
-        </div>
+        {!hasRole('medico') && (
+            <div className="sm:col-span-2 grid gap-4">
+                <SchedulingAssistant />
+            </div>
+        )}
         <Card className="sm:col-span-2">
           <CardContent className="p-0">
             <Calendar mode="single" className="p-3 w-full" />
