@@ -51,9 +51,18 @@ export default function AppointmentsPage() {
                 <SchedulingAssistant />
             </div>
         )}
-        <Card className="sm:col-span-2">
-          <CardContent className="p-0">
-            <Calendar mode="single" className="p-3 w-full" />
+        <Card className="sm:col-span-2 h-full">
+          <CardContent className="p-0 h-full">
+            <Calendar
+              mode="single"
+              className="p-3 w-full h-full"
+              classNames={{
+                month: 'flex flex-col h-full',
+                caption: 'flex justify-center pt-1 relative items-center',
+                table: 'w-full h-full',
+                row: 'flex w-full h-full',
+              }}
+            />
           </CardContent>
         </Card>
       </div>
