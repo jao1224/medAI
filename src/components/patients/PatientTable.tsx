@@ -35,7 +35,7 @@ export function PatientTable({
     if (hasRole('medico')) {
         router.push(`/dashboard/records?patientId=${patient.uid}`);
     }
-    // For other roles, the dialog will be triggered by the TableRow's onClick if they don't have medic role.
+    // For other roles, the dialog is triggered by the ViewPatientDialog component
   };
 
   const filteredPatients = useMemo(() => {
@@ -74,9 +74,10 @@ export function PatientTable({
         {filteredPatients.map((patient) => (
             <TableRow 
                 key={patient.uid} 
+                onClick={() => handleRowClick(patient)}
                 className={hasRole('medico') ? "cursor-pointer" : ""}
             >
-                <TableCell className="font-medium" onClick={() => handleRowClick(patient)}>
+                <TableCell className="font-medium">
                     {hasRole('medico') ? (
                         patient.nome
                     ) : (
@@ -96,4 +97,5 @@ export function PatientTable({
     </Table>
   );
 }
+
 
