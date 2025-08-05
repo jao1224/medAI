@@ -17,9 +17,10 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 
 interface RecordTableProps {
   records: ElectronicHealthRecord[];
+  onRecordUpdate: (record: ElectronicHealthRecord) => void;
 }
 
-export function RecordTable({ records }: RecordTableProps) {
+export function RecordTable({ records, onRecordUpdate }: RecordTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -32,7 +33,7 @@ export function RecordTable({ records }: RecordTableProps) {
       </TableHeader>
       <TableBody>
         {records.map((record) => (
-          <ViewRecordDialog record={record} key={record.id}>
+          <ViewRecordDialog record={record} onRecordUpdate={onRecordUpdate} key={record.id}>
             <DialogTrigger asChild>
               <TableRow className="cursor-pointer">
                 <TableCell>{format(new Date(record.data), "PPP")}</TableCell>

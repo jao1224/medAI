@@ -24,6 +24,14 @@ export default function RecordsPage() {
   const handleRecordAdd = (newRecord: ElectronicHealthRecord) => {
     setRecords((prev) => [newRecord, ...prev]);
   };
+
+  const handleRecordUpdate = (updatedRecord: ElectronicHealthRecord) => {
+    setRecords((prev) => 
+      prev.map((record) => 
+        record.id === updatedRecord.id ? updatedRecord : record
+      )
+    );
+  };
   
   if (loading) {
     return <div>Carregando...</div>
@@ -76,7 +84,7 @@ export default function RecordsPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <RecordTable records={filteredRecords} />
+                <RecordTable records={filteredRecords} onRecordUpdate={handleRecordUpdate} />
             </CardContent>
         </Card>
     </div>

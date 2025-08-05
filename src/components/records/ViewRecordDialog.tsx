@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -5,15 +6,21 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import type { ElectronicHealthRecord } from "@/lib/types";
 import { format } from "date-fns";
 import { ScrollArea } from "../ui/scroll-area";
+import { Button } from "../ui/button";
+import { Pencil } from "lucide-react";
+import { EditRecordDialog } from "./EditRecordDialog";
 
 interface ViewRecordDialogProps {
   record: ElectronicHealthRecord;
+  onRecordUpdate: (record: ElectronicHealthRecord) => void;
   children: React.ReactNode;
 }
 
@@ -25,7 +32,7 @@ const RecordDetailItem = ({ label, value }: { label: string, value: string }) =>
 );
 
 
-export function ViewRecordDialog({ record, children }: ViewRecordDialogProps) {
+export function ViewRecordDialog({ record, onRecordUpdate, children }: ViewRecordDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -38,7 +45,7 @@ export function ViewRecordDialog({ record, children }: ViewRecordDialogProps) {
             {record.tipo} de {record.pacienteNome} em {format(new Date(record.data), "PPP")}
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="max-h-[70vh]">
+        <ScrollArea className="max-h-[60vh]">
             <div className="space-y-4 py-4 pr-6">
                 <div className="text-sm">
                     <div className="font-medium">Profissional</div>
@@ -51,6 +58,19 @@ export function ViewRecordDialog({ record, children }: ViewRecordDialogProps) {
                 <RecordDetailItem label="Conduta" value={record.conduta} />
             </div>
         </ScrollArea>
+        <DialogFooter>
+            <EditRecordDialog record={record} onRecordUpdate={(updatedRecord) => {
+                onRecordUpdate(updatedRecord);
+                setIsOpen(false); // Fecha o modal de visualização após a edição
+            }}>
+                <DialogTrigger asChild>
+                     <Button variant="outline">
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Editar
+                    </Button>
+                </DialogTrigger>
+            </EditRecordDialog>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
