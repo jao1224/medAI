@@ -15,20 +15,52 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { PlusCircle } from "lucide-react";
+import type { User } from "@/lib/types";
 
-export function AddPatientDialog() {
+interface AddPatientDialogProps {
+  onPatientAdd: (newPatient: User) => void;
+}
+
+
+export function AddPatientDialog({ onPatientAdd }: AddPatientDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Here you would typically handle form submission, e.g., by calling an API
-    console.log("New patient submitted");
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const dob = formData.get("dob") as string;
+
+    if (!name || !email) {
+        toast({
+            title: "Error",
+            description: "Name and email are required.",
+            variant: "destructive",
+        });
+        return;
+    }
+
+    const newPatient: User = {
+        uid: `paciente${Date.now()}`,
+        nome: name,
+        email: email,
+        telefone: phone,
+        data_nascimento: dob,
+        perfil: "paciente",
+        criado_em: new Date().toISOString(),
+    };
+
+    onPatientAdd(newPatient);
+
     toast({
       title: "Success",
       description: "New patient added successfully.",
     });
     setIsOpen(false);
+    (event.target as HTMLFormElement).reset();
   };
 
   return (
@@ -52,25 +84,25 @@ export function AddPatientDialog() {
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
-              <Input id="name" defaultValue="Pedro Almeida" className="col-span-3" />
+              <Input name="name" id="name" defaultValue="Pedro Almeida" className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="email" className="text-right">
                 Email
               </Label>
-              <Input id="email" type="email" defaultValue="pedro@example.com" className="col-span-3" />
+              <Input name="email" id="email" type="email" defaultValue="pedro@example.com" className="col-span-3" />
             </div>
              <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="phone" className="text-right">
                 Phone
               </Label>
-              <Input id="phone" type="tel" defaultValue="11987654321" className="col-span-3" />
+              <Input name="phone" id="phone" type="tel" defaultValue="11987654321" className="col-span-3" />
             </div>
              <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="dob" className="text-right">
                 Birth Date
               </Label>
-              <Input id="dob" type="date" defaultValue="1995-02-10" className="col-span-3" />
+              <Input name="dob" id="dob" type="date" defaultValue="1995-02-10" className="col-span-3" />
             </div>
           </div>
           <DialogFooter>

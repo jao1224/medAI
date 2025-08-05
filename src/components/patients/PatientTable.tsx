@@ -6,11 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { mockUsers } from "@/lib/mock-data";
 import { format } from "date-fns";
+import type { User } from "@/lib/types";
 
-export function PatientTable() {
-    const patients = mockUsers.filter(u => u.perfil === 'paciente');
+interface PatientTableProps {
+    patients: User[];
+}
+
+export function PatientTable({ patients }: PatientTableProps) {
   return (
     <Table>
       <TableHeader>

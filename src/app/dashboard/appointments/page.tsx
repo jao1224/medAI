@@ -6,7 +6,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AppointmentTable } from '@/components/appointments/AppointmentTable';
 import { Button } from '@/components/ui/button';
-import { FileDown, PlusCircle } from 'lucide-react';
+import { FileDown } from 'lucide-react';
 import { SchedulingAssistant } from '@/components/ai/SchedulingAssistant';
 import { AddAppointmentDialog } from '@/components/appointments/AddAppointmentDialog';
 import {
@@ -16,13 +16,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockUsers } from '@/lib/mock-data';
+import { mockUsers, mockAppointments } from '@/lib/mock-data';
 import { Label } from '@/components/ui/label';
+import type { Appointment } from '@/lib/types';
 
 export default function AppointmentsPage() {
   const [selectedProfessional, setSelectedProfessional] = useState<string>('all');
+  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
 
   const professionals = mockUsers.filter((user) => user.perfil === 'medico');
+  const patients = mockUsers.filter((user) => user.perfil === 'paciente');
+  
+  const handleAppointmentAdd = (newAppointment: Appointment) => {
+    setAppointments((prev) => [...prev, newAppointment]);
+  };
+
+  const filteredAppointments =
+    selectedProfessional && selectedProfessional !== 'all'
+      ? appointments.filter(
+          (appt) => appt.profissionalId === selectedProfessional
+        )
+      : appointments;
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -62,7 +76,11 @@ export default function AppointmentsPage() {
               </Select>
             </div>
             <div className="flex gap-2">
-              <AddAppointmentDialog />
+              <AddAppointmentDialog 
+                onAppointmentAdd={handleAppointmentAdd}
+                patients={patients}
+                professionals={professionals}
+              />
               <Button variant="outline" size="sm">
                 <FileDown className="mr-2 h-4 w-4" />
                 Export PDF
@@ -75,7 +93,7 @@ export default function AppointmentsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <AppointmentTable professionalId={selectedProfessional} />
+          <AppointmentTable appointments={filteredAppointments} />
         </CardContent>
       </Card>
     </div>

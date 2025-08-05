@@ -22,12 +22,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import type { Appointment, User } from "@/lib/types";
 
-export function AddAppointmentDialog() {
+interface AddAppointmentDialogProps {
+  onAppointmentAdd: (newAppointment: Appointment) => void;
+  patients: User[];
+  professionals: User[];
+}
+
+export function AddAppointmentDialog({ onAppointmentAdd, patients, professionals }: AddAppointmentDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState<Date>();
   const { toast } = useToast();
-  const { hasRole } = useAuth();
+  const { user, hasRole } = useAuth();
   
   const canAdd = hasRole(['admin', 'recepcionista']);
   
@@ -35,19 +42,63 @@ export function AddAppointmentDialog() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Here you would typically handle form submission, e.g., by calling an API
-    console.log("New appointment submitted");
+    const formData = new FormData(event.currentTarget);
+    const patientId = formData.get("patient") as string;
+    const professionalId = formData.get("professional") as string;
+    const time = formData.get("time") as string;
+    const type = formData.get("type") as "consulta" | "exame" | "procedimento";
+
+    if (!patientId || !professionalId || !date || !time || !type) {
+        toast({
+            title: "Error",
+            description: "Please fill all fields.",
+            variant: "destructive",
+        });
+        return;
+    }
+
+    const patient = patients.find(p => p.uid === patientId);
+    const professional = professionals.find(p => p.uid === professionalId);
+
+    if (!patient || !professional) {
+         toast({
+            title: "Error",
+            description: "Invalid patient or professional selected.",
+            variant: "destructive",
+        });
+        return;
+    }
+
+    const [hours, minutes] = time.split(':');
+    const appointmentDateTime = new Date(date);
+    appointmentDateTime.setHours(parseInt(hours, 10));
+    appointmentDateTime.setMinutes(parseInt(minutes, 10));
+
+    const newAppointment: Appointment = {
+        id: `appt${Date.now()}`,
+        pacienteId,
+        pacienteNome: patient.nome,
+        profissionalId,
+        profissionalNome: professional.nome,
+        data_hora: appointmentDateTime.toISOString(),
+        tipo,
+        status: "agendado",
+        criado_por: user?.perfil === 'admin' ? 'recepcionista' : (user?.perfil || 'recepcionista'), // Simplified
+        confirmado: false,
+        canal: "sistema",
+    };
+
+    onAppointmentAdd(newAppointment);
+
     toast({
       title: "Success",
       description: "New appointment created successfully.",
     });
+
     setIsOpen(false);
     setDate(undefined);
     (event.target as HTMLFormElement).reset();
   };
-
-  const patients = mockUsers.filter(u => u.perfil === 'paciente');
-  const professionals = mockUsers.filter(u => u.perfil === 'medico');
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -119,7 +170,7 @@ export function AddAppointmentDialog() {
             </div>
              <div className="space-y-2">
               <Label htmlFor="time">Time</Label>
-              <Input id="time" type="time" defaultValue="09:00" />
+              <Input name="time" id="time" type="time" defaultValue="09:00" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Type</Label>

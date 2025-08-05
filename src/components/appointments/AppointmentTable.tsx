@@ -7,23 +7,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { mockAppointments } from "@/lib/mock-data";
 import { format } from "date-fns";
 import { AppointmentActions } from "./AppointmentActions";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import type { Appointment } from "@/lib/types";
+
 
 interface AppointmentTableProps {
-  professionalId?: string;
+  appointments: Appointment[];
 }
 
-export function AppointmentTable({ professionalId }: AppointmentTableProps) {
-  const appointments =
-    professionalId && professionalId !== 'all'
-      ? mockAppointments.filter(
-          (appt) => appt.profissionalId === professionalId
-        )
-      : mockAppointments;
-
+export function AppointmentTable({ appointments }: AppointmentTableProps) {
   return (
     <ScrollArea className="w-full whitespace-nowrap">
       <Table>
