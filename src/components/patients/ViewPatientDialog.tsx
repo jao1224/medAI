@@ -7,8 +7,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import type { User } from "@/lib/types";
 import { format } from "date-fns";
@@ -49,23 +47,34 @@ export function ViewPatientDialog({ patient, isOpen, onOpenChange }: ViewPatient
 
   const handlePatientUpdate = (updatedPatient: User) => {
     updateUser(updatedPatient);
-    onOpenChange(false); // Close the view dialog after editing
+    // Don't close the view dialog after editing, let the user close it.
+    // onOpenChange(false); 
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader className="flex-row items-center gap-4">
-            <Avatar className="h-16 w-16">
-                <AvatarImage src={`https://placehold.co/64x64.png`} alt={patient.nome} data-ai-hint="profile avatar" />
-                <AvatarFallback className="text-xl">{getInitials(patient.nome)}</AvatarFallback>
-            </Avatar>
-            <div>
-                <DialogTitle className="font-headline text-2xl">{patient.nome}</DialogTitle>
-                <DialogDescription>
-                    Detalhes do paciente
-                </DialogDescription>
+        <DialogHeader>
+           <div className="flex items-start justify-between">
+             <div className="flex items-center gap-4">
+                <Avatar className="h-16 w-16">
+                    <AvatarImage src={`https://placehold.co/64x64.png`} alt={patient.nome} data-ai-hint="profile avatar" />
+                    <AvatarFallback className="text-xl">{getInitials(patient.nome)}</AvatarFallback>
+                </Avatar>
+                <div>
+                    <DialogTitle className="font-headline text-2xl">{patient.nome}</DialogTitle>
+                    <DialogDescription>
+                        Detalhes do paciente
+                    </DialogDescription>
+                </div>
             </div>
+            <EditPatientDialog patient={patient} onPatientUpdate={handlePatientUpdate}>
+                <Button variant="outline" size="icon">
+                    <Pencil className="h-4 w-4" />
+                    <span className="sr-only">Editar</span>
+                </Button>
+            </EditPatientDialog>
+           </div>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh]">
             <div className="space-y-6 py-4 pr-6">
@@ -76,14 +85,6 @@ export function ViewPatientDialog({ patient, isOpen, onOpenChange }: ViewPatient
                 <DetailItem icon={ShieldCheck} label="Plano de Saúde" value={patient.plano_saude} />
             </div>
         </ScrollArea>
-        <DialogFooter>
-            <EditPatientDialog patient={patient} onPatientUpdate={handlePatientUpdate}>
-                <Button variant="outline">
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Editar
-                </Button>
-            </EditPatientDialog>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
