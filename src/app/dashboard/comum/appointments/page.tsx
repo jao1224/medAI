@@ -33,6 +33,17 @@ export default function AppointmentsPage() {
   const handleAppointmentAdd = (newAppointment: Appointment) => {
     setAppointments((prev) => [...prev, newAppointment]);
   };
+  
+  const handleAppointmentUpdate = (updatedAppointment: Appointment) => {
+    setAppointments((prev) => 
+      prev.map(a => a.id === updatedAppointment.id ? updatedAppointment : a)
+    );
+  };
+
+  const handleAppointmentCancel = (appointmentId: string) => {
+    setAppointments((prev) => prev.filter(a => a.id !== appointmentId));
+  };
+
 
   const filteredAppointments = appointments.filter(appointment => {
     const professionalMatch = selectedProfessional === 'all' || appointment.profissionalId === selectedProfessional;
@@ -107,7 +118,11 @@ export default function AppointmentsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <AppointmentTable appointments={filteredAppointments} />
+          <AppointmentTable 
+            appointments={filteredAppointments} 
+            onAppointmentUpdate={handleAppointmentUpdate}
+            onAppointmentCancel={handleAppointmentCancel}
+          />
         </CardContent>
       </Card>
     </div>

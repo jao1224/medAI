@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from "@/components/ui/button";
 import {
@@ -7,20 +8,35 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import type { Appointment } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { MessageDrafter } from "@/components/ai/MessageDrafter";
+import { EditAppointmentDialog } from "./EditAppointmentDialog";
+import { CancelAppointmentDialog } from "./CancelAppointmentDialog";
+import { MoreHorizontal } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
 
 interface AppointmentActionsProps {
   appointment: Appointment;
+  onAppointmentUpdate: (appointment: Appointment) => void;
+  onAppointmentCancel: (appointmentId: string) => void;
 }
 
-export function AppointmentActions({ appointment }: AppointmentActionsProps) {
+export function AppointmentActions({ appointment, onAppointmentUpdate, onAppointmentCancel }: AppointmentActionsProps) {
   const { hasRole } = useAuth();
+  const { toast } = useToast();
   
   const canEdit = hasRole(['admin', 'recepcionista']);
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
+
+  const handleCancel = () => {
+    onAppointmentCancel(appointment.id);
+    toast({
+      title: "Agendamento Cancelado",
+      description: "O agendamento foi cancelado com sucesso.",
+    });
+  };
 
   if (!canEdit && !canSendMessage) {
     return null;
@@ -39,14 +55,11 @@ export function AppointmentActions({ appointment }: AppointmentActionsProps) {
         {canSendMessage && <MessageDrafter appointment={appointment} />}
         {canEdit && (
           <>
-            <DropdownMenuItem>
-              <Pencil className="mr-2 h-4 w-4" />
-              Editar
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
-              <Trash2 className="mr-2 h-4 w-4" />
-              Cancelar
-            </DropdownMenuItem>
+            <EditAppointmentDialog 
+                appointment={appointment} 
+                onAppointmentUpdate={onAppointmentUpdate} 
+            />
+            <CancelAppointmentDialog onConfirm={handleCancel} />
           </>
         )}
       </DropdownMenuContent>
