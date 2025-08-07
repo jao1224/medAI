@@ -31,14 +31,28 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
 
   const handleDelete = () => {
-    if (typeof onAppointmentDelete === 'function') {
-      onAppointmentDelete(appointment.id);
+    try {
+      if (typeof onAppointmentDelete === 'function') {
+        onAppointmentDelete(appointment.id);
+        toast({
+          title: "Agendamento Excluído",
+          description: "O agendamento foi removido com sucesso.",
+        });
+      } else {
+        console.error("onAppointmentDelete não foi passado ou não é uma função:", onAppointmentDelete);
+        toast({
+          title: "Erro",
+          description: "Não foi possível excluir o agendamento. Tente novamente.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao excluir agendamento:", error);
       toast({
-        title: "Agendamento Excluído",
-        description: "O agendamento foi removido com sucesso.",
+        title: "Erro",
+        description: "Ocorreu um erro ao excluir o agendamento.",
+        variant: "destructive",
       });
-    } else {
-        console.error("onAppointmentDelete não foi passado ou não é uma função.");
     }
   }
 

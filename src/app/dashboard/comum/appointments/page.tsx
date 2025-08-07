@@ -41,9 +41,16 @@ export default function AppointmentsPage() {
   };
 
   const handleAppointmentDelete = (appointmentId: string) => {
+    console.log('handleAppointmentDelete called with:', appointmentId);
     setAppointments((prev) => prev.filter(a => a.id !== appointmentId));
   };
 
+  // Debug: verificar se as funções estão sendo definidas corretamente
+  console.log('AppointmentsPage functions:', {
+    handleAppointmentUpdate: typeof handleAppointmentUpdate,
+    handleAppointmentDelete: typeof handleAppointmentDelete,
+    appointmentsCount: appointments.length
+  });
 
   const filteredAppointments = appointments.filter(appointment => {
     const professionalMatch = selectedProfessional === 'all' || appointment.profissionalId === selectedProfessional;
