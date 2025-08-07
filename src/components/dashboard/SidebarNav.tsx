@@ -32,10 +32,6 @@ export function SidebarNav() {
   const pathname = usePathname();
   const { hasRole, loading } = useAuth();
 
-  const getHref = (path: string) => {
-      if(path.endsWith('comum')) return '/dashboard';
-      return path.replace('/comum', '');
-  }
 
   if (loading) {
     return (
@@ -54,13 +50,12 @@ export function SidebarNav() {
           return null;
         }
         
-        const linkHref = getHref(href);
-        const isActive = pathname === linkHref || (linkHref !== '/dashboard' && pathname.startsWith(linkHref));
+        const isActive = pathname === href || (href === '/dashboard/comum' && pathname === '/dashboard');
 
         return (
           <Link
             key={href}
-            href={linkHref}
+            href={href}
             className={cn(
               'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
               isActive && 'bg-muted text-primary'
