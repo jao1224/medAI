@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -44,6 +44,7 @@ export default function AppointmentsPage() {
     setAppointments((prev) => prev.filter(a => a.id !== appointmentId));
   };
 
+<<<<<<< HEAD
   // Debug: verificar se as funções estão sendo definidas corretamente
   console.log('AppointmentsPage functions:', {
     handleAppointmentUpdate: typeof handleAppointmentUpdate,
@@ -58,6 +59,22 @@ export default function AppointmentsPage() {
     const dateMatch = selectedDate ? isSameDay(new Date(appointment.data_hora), selectedDate) : true;
     return professionalMatch && patientMatch && doctorMatch && dateMatch;
   });
+=======
+  const filteredAppointments = useMemo(() => {
+    return appointments.filter(appointment => {
+      const professionalMatch = selectedProfessional === 'all' || appointment.profissionalId === selectedProfessional;
+      const patientMatch = !patientIdFromQuery || appointment.pacienteId === patientIdFromQuery;
+      const doctorMatch = !hasRole('medico') || appointment.profissionalId === user?.uid;
+      
+      const dateMatch = selectedDate
+        ? new Date(appointment.data_hora).toDateString() === selectedDate.toDateString()
+        : true;
+
+      return professionalMatch && patientMatch && doctorMatch && dateMatch;
+    });
+  }, [appointments, selectedProfessional, selectedDate, patientIdFromQuery, hasRole, user?.uid]);
+
+>>>>>>> c04369a (os paceinetes so aparecem se clicar duas veses)
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
