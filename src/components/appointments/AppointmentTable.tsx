@@ -22,13 +22,6 @@ interface AppointmentTableProps {
 }
 
 export function AppointmentTable({ appointments, onAppointmentUpdate, onAppointmentDelete }: AppointmentTableProps) {
-  // Debug: verificar se as props estão sendo passadas corretamente
-  console.log('AppointmentTable props:', {
-    appointmentsCount: appointments.length,
-    onAppointmentUpdate: typeof onAppointmentUpdate,
-    onAppointmentDelete: typeof onAppointmentDelete
-  });
-
   return (
     <ScrollArea className="w-full whitespace-nowrap">
       <Table>
