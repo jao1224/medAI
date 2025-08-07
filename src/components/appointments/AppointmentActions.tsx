@@ -13,8 +13,7 @@ import type { Appointment } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { MessageDrafter } from "@/components/ai/MessageDrafter";
 import { EditAppointmentDialog } from "./EditAppointmentDialog";
-import { DeleteAppointmentDialog } from "./DeleteAppointmentDialog";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 
@@ -31,11 +30,11 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
   const canEdit = hasRole(['admin', 'recepcionista']);
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
 
-  const handleDeleteConfirm = () => {
+  const handleDelete = () => {
     onAppointmentDelete(appointment.id);
     toast({
       title: "Agendamento Excluído",
-      description: "O agendamento foi excluído com sucesso.",
+      description: "O agendamento foi removido com sucesso.",
     });
   }
 
@@ -60,9 +59,13 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
                 appointment={appointment} 
                 onAppointmentUpdate={onAppointmentUpdate} 
             />
-            <DeleteAppointmentDialog 
-              onConfirm={handleDeleteConfirm} 
-            />
+            <DropdownMenuItem
+              className="text-destructive"
+              onSelect={handleDelete}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Excluir
+            </DropdownMenuItem>
           </>
         )}
       </DropdownMenuContent>
