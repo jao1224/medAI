@@ -12,10 +12,7 @@ import type { User } from "@/lib/types";
 import { format } from "date-fns";
 import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Mail, Phone, Home, Cake, ShieldCheck, Pencil } from 'lucide-react';
-import { Button } from "../ui/button";
-import { EditPatientDialog } from "./EditPatientDialog";
-import { useUserData } from "@/hooks/use-user-data";
+import { Mail, Phone, Home, Cake, ShieldCheck } from 'lucide-react';
 
 interface ViewPatientDialogProps {
   patient: User;
@@ -35,8 +32,7 @@ const DetailItem = ({ icon: Icon, label, value }: { icon: React.ElementType, lab
 
 
 export function ViewPatientDialog({ patient, isOpen, onOpenChange }: ViewPatientDialogProps) {
-  const { updateUser } = useUserData();
-
+  
   const getInitials = (name: string) => {
     const names = name.split(' ');
     if (names.length > 1) {
@@ -44,12 +40,6 @@ export function ViewPatientDialog({ patient, isOpen, onOpenChange }: ViewPatient
     }
     return name.substring(0, 2);
   };
-
-  const handlePatientUpdate = (updatedPatient: User) => {
-    updateUser(updatedPatient);
-    // Don't close the view dialog after editing, let the user close it.
-    // onOpenChange(false); 
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -68,12 +58,6 @@ export function ViewPatientDialog({ patient, isOpen, onOpenChange }: ViewPatient
                     </DialogDescription>
                 </div>
             </div>
-            <EditPatientDialog patient={patient} onPatientUpdate={handlePatientUpdate}>
-                <Button variant="outline" size="icon">
-                    <Pencil className="h-4 w-4" />
-                    <span className="sr-only">Editar</span>
-                </Button>
-            </EditPatientDialog>
            </div>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh]">

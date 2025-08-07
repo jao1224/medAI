@@ -16,6 +16,10 @@ import { useMemo, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { ViewPatientDialog } from './ViewPatientDialog';
 import { PatientRecordsDialog } from './PatientRecordsDialog';
+import { Button } from '../ui/button';
+import { Pencil } from 'lucide-react';
+import { EditPatientDialog } from './EditPatientDialog';
+import { useUserData } from '@/hooks/use-user-data';
 
 interface PatientTableProps {
     allPatients: User[];
@@ -31,11 +35,16 @@ export function PatientTable({
     onRecordUpdate,
 }: PatientTableProps) {
   const { user, hasRole, loading } = useAuth();
+  const { updateUser } = useUserData();
   const [selectedPatient, setSelectedPatient] = useState<User | null>(null);
 
   const handleRowClick = (patient: User) => {
     setSelectedPatient(patient);
   };
+
+  const handlePatientUpdate = (updatedPatient: User) => {
+    updateUser(updatedPatient);
+  }
   
   const filteredPatients = useMemo(() => {
     if (hasRole('medico') && user) {
@@ -69,6 +78,7 @@ export function PatientTable({
             <TableHead>Telefone</TableHead>
             <TableHead>Plano de Saúde</TableHead>
             <TableHead>Data de Nascimento</TableHead>
+            {hasRole(['admin', 'recepcionista']) && <TableHead className="text-right">Ações</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -87,6 +97,20 @@ export function PatientTable({
                   <TableCell>
                       {patient.data_nascimento ? format(new Date(patient.data_nascimento), "PPP") : '-'}
                   </TableCell>
+                   {hasRole(['admin', 'recepcionista']) && (
+                    <TableCell className="text-right">
+                        <EditPatientDialog patient={patient} onPatientUpdate={handlePatientUpdate}>
+                            <Button 
+                                variant="ghost" 
+                                size="icon"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <Pencil className="h-4 w-4" />
+                                <span className="sr-only">Editar Paciente</span>
+                            </Button>
+                        </EditPatientDialog>
+                    </TableCell>
+                  )}
               </TableRow>
           ))}
         </TableBody>
