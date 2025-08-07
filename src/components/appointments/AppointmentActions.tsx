@@ -31,11 +31,15 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
 
   const handleDelete = () => {
-    onAppointmentDelete(appointment.id);
-    toast({
-      title: "Agendamento Excluído",
-      description: "O agendamento foi removido com sucesso.",
-    });
+    if (typeof onAppointmentDelete === 'function') {
+      onAppointmentDelete(appointment.id);
+      toast({
+        title: "Agendamento Excluído",
+        description: "O agendamento foi removido com sucesso.",
+      });
+    } else {
+        console.error("onAppointmentDelete is not a function");
+    }
   }
 
   if (!canEdit && !canSendMessage) {
