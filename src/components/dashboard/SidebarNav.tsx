@@ -18,19 +18,24 @@ import {
 import { Skeleton } from '../ui/skeleton';
 
 const navItems = [
-  { href: '/dashboard', label: 'Painel', icon: Home, roles: ['admin', 'medico', 'recepcionista'] },
-  { href: '/dashboard/appointments', label: 'Agendamentos', icon: Calendar, roles: ['admin', 'medico', 'recepcionista'] },
-  { href: '/dashboard/patients', label: 'Pacientes', icon: Users, roles: ['admin', 'medico', 'recepcionista'] },
-  { href: '/dashboard/records', label: 'Prontuários', icon: FileText, roles: ['medico'] },
-  { href: '/dashboard/financial', label: 'Financeiro', icon: CreditCard, roles: ['admin', 'recepcionista'] },
-  { href: '/dashboard/reports', label: 'Relatórios', icon: BarChart3, roles: ['admin'] },
-  { href: '/dashboard/ai-logs', label: 'Logs da IA', icon: BotMessageSquare, roles: ['admin', 'recepcionista'] },
-  { href: '/dashboard/settings', label: 'Configurações', icon: Settings, roles: ['admin'] },
+  { href: '/dashboard/comum', label: 'Painel', icon: Home, roles: ['admin', 'medico', 'recepcionista'] },
+  { href: '/dashboard/comum/appointments', label: 'Agendamentos', icon: Calendar, roles: ['admin', 'medico', 'recepcionista'] },
+  { href: '/dashboard/comum/patients', label: 'Pacientes', icon: Users, roles: ['admin', 'medico', 'recepcionista'] },
+  { href: '/dashboard/medico/records', label: 'Prontuários', icon: FileText, roles: ['medico'] },
+  { href: '/dashboard/atendimento/financial', label: 'Financeiro', icon: CreditCard, roles: ['admin', 'recepcionista'] },
+  { href: '/dashboard/atendimento/reports', label: 'Relatórios', icon: BarChart3, roles: ['admin'] },
+  { href: '/dashboard/atendimento/ai-logs', label: 'Logs da IA', icon: BotMessageSquare, roles: ['admin', 'recepcionista'] },
+  { href: '/dashboard/atendimento/settings', label: 'Configurações', icon: Settings, roles: ['admin'] },
 ];
 
 export function SidebarNav() {
   const pathname = usePathname();
   const { hasRole, loading } = useAuth();
+
+  const getHref = (path: string) => {
+      if(path.endsWith('comum')) return '/dashboard';
+      return path.replace('/comum', '');
+  }
 
   if (loading) {
     return (
@@ -48,11 +53,14 @@ export function SidebarNav() {
         if (!hasRole(roles)) {
           return null;
         }
-        const isActive = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
+        
+        const linkHref = getHref(href);
+        const isActive = pathname === linkHref || (linkHref !== '/dashboard' && pathname.startsWith(linkHref));
+
         return (
           <Link
             key={href}
-            href={href}
+            href={linkHref}
             className={cn(
               'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
               isActive && 'bg-muted text-primary'

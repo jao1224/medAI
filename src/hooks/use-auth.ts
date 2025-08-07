@@ -22,8 +22,8 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
-    if (!loading && !user && pathname !== '/') {
-        router.push('/');
+    if (!loading && !user && !pathname.startsWith('/login')) {
+        router.push('/login');
     }
   }, [user, loading, pathname, router]);
 
@@ -49,7 +49,7 @@ export function useAuth() {
   const logout = useCallback(() => {
     setUser(null);
     sessionStorage.removeItem('user');
-    router.push('/');
+    router.push('/login');
   }, [router]);
   
   const hasRole = (roles: UserProfile | UserProfile[]) => {

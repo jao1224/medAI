@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  // The root path is now the login page, so no redirect is needed from middleware.
-  // The auth hook will handle redirecting to /dashboard after login.
+  // Redirect root to /login
+  if (request.nextUrl.pathname === '/') {
+    return NextResponse.rewrite(new URL('/login', request.url))
+  }
   return NextResponse.next()
 }
 
@@ -15,7 +17,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - login (login page)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|login).*)',
   ],
 }
