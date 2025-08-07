@@ -22,7 +22,7 @@ export interface Appointment {
   profissionalNome: string;
   data_hora: string; // Using string for simplicity
   tipo: "consulta" | "exame" | "procedimento";
-  status: "agendado" | "concluido" | "cancelado";
+  status: "agendado" | "concluido" | "cancelado" | "reagendado";
   criado_por: "recepcionista" | "IA" | "paciente" | "admin";
   confirmado: boolean;
   reagendado_para?: string;

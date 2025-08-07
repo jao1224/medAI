@@ -1,12 +1,10 @@
-
-
 'use client';
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import type { Appointment } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { MessageDrafter } from "@/components/ai/MessageDrafter";
 import { EditAppointmentDialog } from "./EditAppointmentDialog";
-import { MoreHorizontal, Trash2 } from "lucide-react";
+import { MoreHorizontal, Trash2, CalendarOff, CalendarClock, Bot } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { DeleteAppointmentDialog } from "./DeleteAppointmentDialog";
+import { CancelAppointmentDialog } from "./CancelAppointmentDialog";
+import { useToast } from "@/hooks/use-toast";
 
 
 interface AppointmentActionsProps {
@@ -25,6 +25,7 @@ interface AppointmentActionsProps {
 
 export function AppointmentActions({ appointment, onAppointmentUpdate, onAppointmentDelete }: AppointmentActionsProps) {
   const { hasRole } = useAuth();
+  const { toast } = useToast();
   
   const canEdit = hasRole(['admin', 'recepcionista']);
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
@@ -34,6 +35,18 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
       onAppointmentDelete(appointment.id);
     } else {
       console.error("onAppointmentDelete não é uma função.");
+    }
+  }
+
+  const handleCancel = () => {
+    if (typeof onAppointmentUpdate === 'function') {
+      onAppointmentUpdate({ ...appointment, status: 'cancelado' });
+      toast({
+        title: "Agendamento Cancelado",
+        description: "O status do agendamento foi alterado para cancelado."
+      });
+    } else {
+        console.error("onAppointmentUpdate não é uma função.");
     }
   }
 
@@ -56,8 +69,33 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
           <>
             <EditAppointmentDialog 
                 appointment={appointment} 
-                onAppointmentUpdate={onAppointmentUpdate} 
-            />
+                onAppointmentUpdate={onAppointmentUpdate}
+                isReschedule={false}
+            >
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <Bot className="mr-2 h-4 w-4" />
+                Editar
+              </DropdownMenuItem>
+            </EditAppointmentDialog>
+            <EditAppointmentDialog 
+                appointment={appointment} 
+                onAppointmentUpdate={onAppointmentUpdate}
+                isReschedule={true}
+            >
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <CalendarClock className="mr-2 h-4 w-4" />
+                Reagendar
+              </DropdownMenuItem>
+            </EditAppointmentDialog>
+            <CancelAppointmentDialog onConfirm={handleCancel}>
+                <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                >
+                    <CalendarOff className="mr-2 h-4 w-4" />
+                    Cancelar
+                </DropdownMenuItem>
+            </CancelAppointmentDialog>
+            <DropdownMenuSeparator />
             <DeleteAppointmentDialog onConfirm={handleDelete}>
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive focus:bg-destructive/10"

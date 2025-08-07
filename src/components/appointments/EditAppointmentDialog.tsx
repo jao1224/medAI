@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -26,11 +25,12 @@ import type { Appointment } from "@/lib/types";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useUserData } from "@/hooks/use-user-data";
 import { Input } from "../ui/input";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
 
 interface EditAppointmentDialogProps {
   appointment: Appointment;
   onAppointmentUpdate: (updatedAppointment: Appointment) => void;
+  isReschedule: boolean;
+  children: React.ReactNode;
 }
 
 const appointmentSchema = z.object({
@@ -39,12 +39,12 @@ const appointmentSchema = z.object({
     date: z.date({ required_error: "Por favor, selecione uma data." }),
     time: z.string({ required_error: "Por favor, selecione um horário." }).min(1, 'O horário é obrigatório'),
     type: z.enum(["consulta", "exame", "procedimento"], { required_error: "Por favor, selecione um tipo." }),
-    status: z.enum(["agendado", "concluido", "cancelado"], { required_error: "Por favor, selecione um status." }),
+    status: z.enum(["agendado", "concluido", "cancelado", "reagendado"], { required_error: "Por favor, selecione um status." }),
 });
 
 type AppointmentFormValues = z.infer<typeof appointmentSchema>;
 
-export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: EditAppointmentDialogProps) {
+export function EditAppointmentDialog({ appointment, onAppointmentUpdate, isReschedule, children }: EditAppointmentDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   const { patients, professionals } = useUserData();
@@ -62,10 +62,10 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
             date: appointmentDate,
             time: format(appointmentDate, "HH:mm"),
             type: appointment.tipo,
-            status: appointment.status,
+            status: isReschedule ? 'reagendado' : appointment.status,
         });
     }
-  }, [isOpen, appointment, form]);
+  }, [isOpen, appointment, form, isReschedule]);
 
   const onSubmit = (data: AppointmentFormValues) => {
     const patient = patients.find(p => p.uid === data.patientId);
@@ -100,7 +100,7 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
 
     toast({
       title: "Sucesso",
-      description: "Agendamento atualizado com sucesso.",
+      description: `Agendamento ${isReschedule ? 'reagendado' : 'atualizado'} com sucesso.`,
     });
 
     setIsOpen(false);
@@ -109,19 +109,16 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <Pencil className="mr-2 h-4 w-4" />
-            Editar
-        </DropdownMenuItem>
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         {isOpen && (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <DialogHeader>
-                <DialogTitle>Editar Agendamento</DialogTitle>
+                <DialogTitle>{isReschedule ? 'Reagendar' : 'Editar'} Agendamento</DialogTitle>
                 <DialogDescription>
-                  Modifique os detalhes para atualizar o agendamento.
+                  {isReschedule ? 'Escolha uma nova data e/ou hora.' : 'Modifique os detalhes para atualizar o agendamento.'}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-4">
@@ -131,7 +128,7 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Paciente</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isReschedule}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione um paciente" />
@@ -153,7 +150,7 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Profissional</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isReschedule}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione um profissional" />
@@ -222,7 +219,7 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Tipo</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isReschedule}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione um tipo" />
@@ -244,7 +241,7 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isReschedule}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione um status" />
@@ -254,6 +251,7 @@ export function EditAppointmentDialog({ appointment, onAppointmentUpdate }: Edit
                           <SelectItem value="agendado">Agendado</SelectItem>
                           <SelectItem value="concluido">Concluído</SelectItem>
                           <SelectItem value="cancelado">Cancelado</SelectItem>
+                          <SelectItem value="reagendado">Reagendado</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

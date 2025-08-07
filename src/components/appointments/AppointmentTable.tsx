@@ -1,5 +1,3 @@
-
-
 import {
   Table,
   TableBody,
@@ -22,6 +20,13 @@ interface AppointmentTableProps {
 }
 
 export function AppointmentTable({ appointments, onAppointmentUpdate, onAppointmentDelete }: AppointmentTableProps) {
+  // Debug: verificar se as props estão sendo passadas corretamente
+  console.log('AppointmentTable props:', {
+    appointmentsCount: appointments.length,
+    onAppointmentUpdate: typeof onAppointmentUpdate,
+    onAppointmentDelete: typeof onAppointmentDelete
+  });
+
   return (
     <ScrollArea className="w-full whitespace-nowrap">
       <Table>
@@ -46,7 +51,7 @@ export function AppointmentTable({ appointments, onAppointmentUpdate, onAppointm
               <TableCell>{format(new Date(appt.data_hora), "PPP p")}</TableCell>
               <TableCell className="capitalize">{appt.tipo}</TableCell>
               <TableCell>
-                <Badge variant={appt.status === "cancelado" ? "destructive" : appt.status === "concluido" ? "secondary" : "default"} className="capitalize">
+                <Badge variant={getBadgeVariant(appt.status)} className="capitalize">
                   {appt.status}
                 </Badge>
               </TableCell>
