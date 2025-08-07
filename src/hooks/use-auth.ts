@@ -36,7 +36,7 @@ export function useAuth() {
         setUser(foundUser);
         sessionStorage.setItem('user', JSON.stringify(foundUser));
         console.log('User found, navigating to dashboard');
-        router.push('/dashboard');
+        router.push('/dashboard/comum');
         setLoading(false);
         return true;
     }
