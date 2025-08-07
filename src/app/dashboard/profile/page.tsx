@@ -15,7 +15,7 @@ export default function ProfilePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-lg font-semibold text-muted-foreground">Em Breve!</p>
+          <p className="text-lg font-semibold text-muted-foreground"> Em Breve!</p>
         </CardContent>
       </Card>
     </div>
