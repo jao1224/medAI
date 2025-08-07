@@ -1,4 +1,5 @@
 
+
 import {
   Table,
   TableBody,
@@ -17,10 +18,10 @@ import type { Appointment } from "@/lib/types";
 interface AppointmentTableProps {
   appointments: Appointment[];
   onAppointmentUpdate: (appointment: Appointment) => void;
-  onAppointmentCancel: (appointmentId: string) => void;
+  onAppointmentDelete: (appointmentId: string) => void;
 }
 
-export function AppointmentTable({ appointments, onAppointmentUpdate, onAppointmentCancel }: AppointmentTableProps) {
+export function AppointmentTable({ appointments, onAppointmentUpdate, onAppointmentDelete }: AppointmentTableProps) {
   return (
     <ScrollArea className="w-full whitespace-nowrap">
       <Table>
@@ -54,7 +55,7 @@ export function AppointmentTable({ appointments, onAppointmentUpdate, onAppointm
                 <AppointmentActions 
                   appointment={appt} 
                   onAppointmentUpdate={onAppointmentUpdate} 
-                  onAppointmentCancel={onAppointmentCancel}
+                  onAppointmentDelete={onAppointmentDelete}
                 />
               </TableCell>
             </TableRow>

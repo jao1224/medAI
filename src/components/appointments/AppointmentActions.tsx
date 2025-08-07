@@ -1,4 +1,5 @@
 
+
 'use client';
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,7 @@ import type { Appointment } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { MessageDrafter } from "@/components/ai/MessageDrafter";
 import { EditAppointmentDialog } from "./EditAppointmentDialog";
-import { CancelAppointmentDialog } from "./CancelAppointmentDialog";
+import { DeleteAppointmentDialog } from "./DeleteAppointmentDialog";
 import { MoreHorizontal } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,21 +21,21 @@ import { useToast } from "@/hooks/use-toast";
 interface AppointmentActionsProps {
   appointment: Appointment;
   onAppointmentUpdate: (appointment: Appointment) => void;
-  onAppointmentCancel: (appointmentId: string) => void;
+  onAppointmentDelete: (appointmentId: string) => void;
 }
 
-export function AppointmentActions({ appointment, onAppointmentUpdate, onAppointmentCancel }: AppointmentActionsProps) {
+export function AppointmentActions({ appointment, onAppointmentUpdate, onAppointmentDelete }: AppointmentActionsProps) {
   const { hasRole } = useAuth();
   const { toast } = useToast();
   
   const canEdit = hasRole(['admin', 'recepcionista']);
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
 
-  const handleConfirmCancel = () => {
-    onAppointmentCancel(appointment.id);
+  const handleDeleteConfirm = () => {
+    onAppointmentDelete(appointment.id);
     toast({
-      title: "Agendamento Cancelado",
-      description: "O agendamento foi cancelado com sucesso.",
+      title: "Agendamento Excluído",
+      description: "O agendamento foi excluído com sucesso.",
     });
   }
 
@@ -59,8 +60,8 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
                 appointment={appointment} 
                 onAppointmentUpdate={onAppointmentUpdate} 
             />
-            <CancelAppointmentDialog 
-              onConfirm={handleConfirmCancel} 
+            <DeleteAppointmentDialog 
+              onConfirm={handleDeleteConfirm} 
             />
           </>
         )}

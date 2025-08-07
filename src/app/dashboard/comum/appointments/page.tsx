@@ -40,7 +40,7 @@ export default function AppointmentsPage() {
     );
   };
 
-  const handleAppointmentCancel = (appointmentId: string) => {
+  const handleAppointmentDelete = (appointmentId: string) => {
     setAppointments((prev) => prev.filter(a => a.id !== appointmentId));
   };
 
@@ -121,7 +121,7 @@ export default function AppointmentsPage() {
           <AppointmentTable 
             appointments={filteredAppointments} 
             onAppointmentUpdate={handleAppointmentUpdate}
-            onAppointmentCancel={handleAppointmentCancel}
+            onAppointmentDelete={handleAppointmentDelete}
           />
         </CardContent>
       </Card>
