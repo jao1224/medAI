@@ -116,7 +116,9 @@ export default function Dashboard() {
             </Table>
           </CardContent>
         </Card>
-        <ReportsDashboard isDashboard={true} />
+        <div className="lg:col-span-3">
+            <ReportsDashboard isDashboard={true} />
+        </div>
       </div>
     </div>
   );
