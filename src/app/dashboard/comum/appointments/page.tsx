@@ -55,18 +55,9 @@ export default function AppointmentsPage() {
     const professionalMatch = selectedProfessional === 'all' || appointment.profissionalId === selectedProfessional;
     const patientMatch = !patientIdFromQuery || appointment.pacienteId === patientIdFromQuery;
     const doctorMatch = !hasRole('medico') || appointment.profissionalId === user?.uid;
-    return professionalMatch && patientMatch && doctorMatch;
+    const dateMatch = selectedDate ? isSameDay(new Date(appointment.data_hora), selectedDate) : true;
+    return professionalMatch && patientMatch && doctorMatch && dateMatch;
   });
-
-  // Função para lidar com a seleção de data no calendário
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date);
-  };
-
-  // Função para limpar o filtro de data
-  const clearDateFilter = () => {
-    setSelectedDate(undefined);
-  };
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
