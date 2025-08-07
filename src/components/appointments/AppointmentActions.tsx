@@ -38,7 +38,7 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
         description: "O agendamento foi removido com sucesso.",
       });
     } else {
-        console.error("onAppointmentDelete is not a function");
+        console.error("onAppointmentDelete não foi passado ou não é uma função.");
     }
   }
 
