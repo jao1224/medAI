@@ -8,6 +8,7 @@ import type { User, Appointment, ElectronicHealthRecord } from '@/lib/types';
 interface UserDataContextType {
   users: User[];
   addUser: (user: User) => void;
+  updateUser: (user: User) => void;
   patients: User[];
   professionals: User[];
   appointments: Appointment[];
@@ -27,6 +28,10 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
   const addUser = (user: User) => {
     setUsers((prevUsers) => [...prevUsers, user]);
   };
+
+  const updateUser = (updatedUser: User) => {
+    setUsers((prevUsers) => prevUsers.map(user => user.uid === updatedUser.uid ? updatedUser : user));
+  }
   
   const patients = users.filter((user) => user.perfil === 'paciente');
   const professionals = users.filter((user) => user.perfil === 'medico');
@@ -34,6 +39,7 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
   const value = {
     users,
     addUser,
+    updateUser,
     patients,
     professionals,
     appointments,

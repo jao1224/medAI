@@ -93,7 +93,15 @@ export function PatientTable({
       </Table>
       
       {selectedPatient && (
-        hasRole('medico') ? (
+        hasRole(['admin', 'recepcionista']) ? (
+            <ViewPatientDialog 
+                patient={selectedPatient}
+                isOpen={!!selectedPatient}
+                onOpenChange={(isOpen) => {
+                    if(!isOpen) setSelectedPatient(null);
+                }}
+            />
+        ) : (
             <PatientRecordsDialog
                 patient={selectedPatient}
                 records={allRecords.filter(r => r.pacienteId === selectedPatient.uid && r.profissionalId === user?.uid)}
@@ -102,14 +110,6 @@ export function PatientTable({
                     if(!isOpen) setSelectedPatient(null);
                 }}
                 onRecordUpdate={onRecordUpdate}
-            />
-        ) : (
-            <ViewPatientDialog 
-                patient={selectedPatient}
-                isOpen={!!selectedPatient}
-                onOpenChange={(isOpen) => {
-                    if(!isOpen) setSelectedPatient(null);
-                }}
             />
         )
       )}
