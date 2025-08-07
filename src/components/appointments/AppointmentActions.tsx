@@ -1,20 +1,20 @@
 
 
 'use client';
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import type { Appointment } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { MessageDrafter } from "@/components/ai/MessageDrafter";
 import { EditAppointmentDialog } from "./EditAppointmentDialog";
 import { MoreHorizontal, Trash2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { DeleteAppointmentDialog } from "./DeleteAppointmentDialog";
 
 
 interface AppointmentActionsProps {
@@ -25,34 +25,15 @@ interface AppointmentActionsProps {
 
 export function AppointmentActions({ appointment, onAppointmentUpdate, onAppointmentDelete }: AppointmentActionsProps) {
   const { hasRole } = useAuth();
-  const { toast } = useToast();
   
   const canEdit = hasRole(['admin', 'recepcionista']);
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
 
   const handleDelete = () => {
-    try {
-      if (typeof onAppointmentDelete === 'function') {
-        onAppointmentDelete(appointment.id);
-        toast({
-          title: "Agendamento Excluído",
-          description: "O agendamento foi removido com sucesso.",
-        });
-      } else {
-        console.error("onAppointmentDelete não foi passado ou não é uma função:", onAppointmentDelete);
-        toast({
-          title: "Erro",
-          description: "Não foi possível excluir o agendamento. Tente novamente.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error("Erro ao excluir agendamento:", error);
-      toast({
-        title: "Erro",
-        description: "Ocorreu um erro ao excluir o agendamento.",
-        variant: "destructive",
-      });
+    if (typeof onAppointmentDelete === 'function') {
+      onAppointmentDelete(appointment.id);
+    } else {
+      console.error("onAppointmentDelete não é uma função.");
     }
   }
 
@@ -77,13 +58,15 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
                 appointment={appointment} 
                 onAppointmentUpdate={onAppointmentUpdate} 
             />
-            <DropdownMenuItem
-              className="text-destructive focus:text-destructive focus:bg-destructive/10"
-              onSelect={handleDelete}
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Excluir
-            </DropdownMenuItem>
+            <DeleteAppointmentDialog onConfirm={handleDelete}>
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                onSelect={(e) => e.preventDefault()}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Excluir
+              </DropdownMenuItem>
+            </DeleteAppointmentDialog>
           </>
         )}
       </DropdownMenuContent>
