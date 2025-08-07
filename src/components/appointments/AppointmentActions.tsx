@@ -30,6 +30,14 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
   const canEdit = hasRole(['admin', 'recepcionista']);
   const canSendMessage = hasRole(['admin', 'recepcionista']) && (appointment.canal === 'whatsapp' || appointment.canal === 'email');
 
+  const handleConfirmCancel = () => {
+    onAppointmentCancel(appointment.id);
+    toast({
+      title: "Agendamento Cancelado",
+      description: "O agendamento foi cancelado com sucesso.",
+    });
+  }
+
   if (!canEdit && !canSendMessage) {
     return null;
   }
@@ -52,13 +60,7 @@ export function AppointmentActions({ appointment, onAppointmentUpdate, onAppoint
                 onAppointmentUpdate={onAppointmentUpdate} 
             />
             <CancelAppointmentDialog 
-              onConfirm={() => {
-                onAppointmentCancel(appointment.id);
-                toast({
-                  title: "Agendamento Cancelado",
-                  description: "O agendamento foi cancelado com sucesso.",
-                });
-              }} 
+              onConfirm={handleConfirmCancel} 
             />
           </>
         )}
