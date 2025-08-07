@@ -19,6 +19,24 @@ interface AppointmentTableProps {
   onAppointmentDelete: (appointmentId: string) => void;
 }
 
+<<<<<<< HEAD
+=======
+const getBadgeVariant = (status: Appointment['status']): 'destructive' | 'warning' | 'secondary' | 'default' => {
+  switch (status) {
+    case 'cancelado':
+      return 'destructive';
+    case 'reagendado':
+      return 'warning';
+    case 'concluido':
+      return 'secondary';
+    case 'agendado':
+    default:
+      return 'default';
+  }
+};
+
+
+>>>>>>> aefdb16 (I see this error with the app, reported by NextJS, please fix it. The er)
 export function AppointmentTable({ appointments, onAppointmentUpdate, onAppointmentDelete }: AppointmentTableProps) {
   return (
     <ScrollArea className="w-full whitespace-nowrap">
